@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saffra — The AI Chef in Your Pocket</title>
-  <meta name="description" content="Chef Saffra helps you make anything. Built on Claude Opus 4.7 with a 250-line chef persona, 9 specialized tools, and a curated library of 230,000+ recipes — she knows your pantry, your skill, and your allergies. Voice-first, hands-free.">
+  <meta name="description" content="Chef Saffra helps you make anything. Built on GPT-4o with a 250-line chef persona, 9 specialized tools, and a curated library of 230,000+ recipes — she knows your pantry, your skill, and your allergies. Voice-first, hands-free.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://drvanus.github.io/saffra-app/">
   <meta property="og:type" content="website">
@@ -918,7 +918,7 @@
       <div class="intelligence-card anim anim-d1">
         <div class="icon-box"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg></div>
         <h3>A real chef persona — not a generic LLM</h3>
-        <p>Powered by <strong>Claude Opus 4.7</strong>, Anthropic's most capable model, guided by a custom <strong>250-line chef system prompt</strong> we wrote ourselves. Saffra has a name, a voice, signature moves, hard safety rules, and a tone that calibrates to your skill: beginners get sensory cues ("when oil shimmers, when it smells nutty"), pros get terse technique-first ("hit it with a nappé"). One model, infinite cooks.</p>
+        <p>Powered by <strong>GPT-4o</strong>, OpenAI's flagship multimodal model, guided by a custom <strong>250-line chef system prompt</strong> we wrote ourselves. Saffra has a name, a voice, signature moves, hard safety rules, and a tone that calibrates to your skill: beginners get sensory cues ("when oil shimmers, when it smells nutty"), pros get terse technique-first ("hit it with a nappé"). One model, infinite cooks.</p>
       </div>
       <div class="intelligence-card anim anim-d2">
         <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
@@ -949,8 +949,8 @@
 
     <div class="intel-stats anim anim-d3">
       <div class="intel-stat">
-        <div class="intel-stat-num gradient-text-warm">Opus 4.7</div>
-        <div class="intel-stat-label">Anthropic's Top Model</div>
+        <div class="intel-stat-num gradient-text-warm">GPT-4o</div>
+        <div class="intel-stat-label">OpenAI's Flagship</div>
       </div>
       <div class="intel-stat">
         <div class="intel-stat-num gradient-text-warm">9 tools</div>
@@ -1114,7 +1114,7 @@
     <div class="faq-list">
       <div class="faq-item"><button class="faq-q">How is Saffra different from a recipe site or ChatGPT?<span class="faq-icon">+</span></button><div class="faq-a"><p>Recipe sites don't know what's in your fridge. ChatGPT doesn't either — and it doesn't remember the last thing you cooked, doesn't search a real recipe library before answering, and doesn't have hard rules for allergens. Saffra is built for cooking specifically: she calls a pantry tool before every suggestion, retrieves recipes from a curated index instead of improvising, remembers your cook history with star ratings, and treats declared allergies as a hard refusal rule, not a soft hint. The chef persona itself is a 250-line system prompt with explicit safety rules, tone calibration by skill level, and signature behaviors — none of which a generic chatbot has.</p></div></div>
 
-      <div class="faq-item"><button class="faq-q">What's actually powering Saffra?<span class="faq-icon">+</span></button><div class="faq-a"><p>The brain is <strong>Claude Opus 4.7</strong> — Anthropic's most capable model — with <strong>Claude Haiku 4.5</strong> as a faster utility model for simple tasks (parsing receipts, folding old conversations into summaries). The chef persona is a custom 250-line system prompt we wrote and maintain. Recipe search runs on <strong>Voyage AI embeddings</strong> over our curated library. Voice synthesis is <strong>ElevenLabs streaming TTS</strong>, content-addressed cached so the same line never renders twice. Speech recognition runs on-device via Apple's Speech framework. Image OCR for receipts and cookbook pages also runs on-device, via Apple's Vision framework — your photos never leave your phone.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What's actually powering Saffra?<span class="faq-icon">+</span></button><div class="faq-a"><p>The brain is <strong>GPT-4o</strong> — OpenAI's flagship multimodal model — with <strong>GPT-4o-mini</strong> as a faster utility model for simple tasks (parsing receipts, folding old conversations into summaries). The chef persona is a custom 250-line system prompt we wrote and maintain. Recipe search runs on <strong>Voyage AI embeddings</strong> over our curated library. Voice synthesis is <strong>ElevenLabs streaming TTS</strong>, content-addressed cached so the same line never renders twice. Speech recognition runs on-device via Apple's Speech framework. Image OCR for receipts and cookbook pages also runs on-device, via Apple's Vision framework — your photos never leave your phone.</p></div></div>
 
       <div class="faq-item"><button class="faq-q">How accurate is the cooking advice?<span class="faq-icon">+</span></button><div class="faq-a"><p>Two things keep her grounded. <strong>One</strong>: when you ask for a specific dish or "what should I cook?", she calls a tool that searches our curated recipe library — hand-curated flagship recipes plus 230,000 CC0-licensed recipes — instead of improvising one from memory. So you get a real recipe, adapted for you, not a hallucination. <strong>Two</strong>: for techniques and substitutions she calls dedicated tools (technique explainer, substitution lookup) rather than guessing. She also won't claim to have personally tasted something — she'll say "by the numbers, this should read bright and savory" instead of "I love this." If she's not sure, she says so.</p></div></div>
 
@@ -1122,7 +1122,7 @@
 
       <div class="faq-item"><button class="faq-q">Will she remember what I've cooked?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Conversations are persisted, your pantry is tracked, and recipes you rate 4-5 stars influence future suggestions. After about 24 turns the older messages fold into a compact summary so context stays sharp without bloating. She knows what you've cooked recently (and won't repeat last Tuesday's dinner unless you ask), what you've loved, and what fell flat. Her system prompt explicitly tells her to weight suggestions toward your wins, vary within genres you've succeeded at, and treat anything she's already pitched in this thread as off the table.</p></div></div>
 
-      <div class="faq-item"><button class="faq-q">How does she know what's in my pantry?<span class="faq-icon">+</span></button><div class="faq-a"><p>You tell her — but quickly. Snap a grocery receipt and on-device OCR extracts the lines, then Haiku 4.5 parses them into clean line items (your photo never leaves the phone). Or scan a barcode — the lookup runs against Open Food Facts and items land in your pantry pre-tagged with category, expiration, and allergen flags. Or just type things in. As you cook, she tracks what's used and what's running low. Items going off ("the cilantro's gone yellow") get surfaced for tonight's dinner instead of going in the trash.</p></div></div>
+      <div class="faq-item"><button class="faq-q">How does she know what's in my pantry?<span class="faq-icon">+</span></button><div class="faq-a"><p>You tell her — but quickly. Snap a grocery receipt and on-device OCR extracts the lines, then GPT-4o-mini parses them into clean line items (your photo never leaves the phone). Or scan a barcode — the lookup runs against Open Food Facts and items land in your pantry pre-tagged with category, expiration, and allergen flags. Or just type things in. As you cook, she tracks what's used and what's running low. Items going off ("the cilantro's gone yellow") get surfaced for tonight's dinner instead of going in the trash.</p></div></div>
 
       <div class="faq-item"><button class="faq-q">Do I have to use voice?<span class="faq-icon">+</span></button><div class="faq-a"><p>Never. Text-mode chat is the default and works exactly the same. Voice mode is for when your hands are deep in dough or holding a knife. Toggle it per-session in Settings, or open Cooking Mode for full hands-free narration with the wake phrase "hey chef" — note that the wake phrase is <em>only</em> armed inside Cooking Mode, never app-wide, so the mic isn't listening when you're not cooking. Voice timers fire silently and land in Live Activities (Lock Screen + Dynamic Island). Free tier is text-only; Pro unlocks voice cooking.</p></div></div>
 
