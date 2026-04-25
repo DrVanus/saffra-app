@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saffra — The AI Chef in Your Pocket</title>
-  <meta name="description" content="Chef Saffra helps you make anything. The AI cooking partner who knows your pantry, your skill, and your allergies — and rewrites every recipe for you. Voice-first, hands-free.">
+  <meta name="description" content="Chef Saffra helps you make anything. Built on Claude Opus 4.7 with a 250-line chef persona, 9 specialized tools, and a curated library of 230,000+ recipes — she knows your pantry, your skill, and your allergies. Voice-first, hands-free.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://drvanus.github.io/saffra-app/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Saffra — The AI Chef in Your Pocket">
-  <meta property="og:description" content="Chef Saffra helps you make anything. AI cooking partner who knows your kitchen. Voice-first, hands-free.">
+  <meta property="og:description" content="Chef Saffra helps you make anything. AI cooking partner who knows your kitchen. Built like a chef, not a chatbot.">
   <meta property="og:url" content="https://drvanus.github.io/saffra-app/">
   <meta property="og:site_name" content="Saffra">
   <meta property="og:image" content="https://drvanus.github.io/saffra-app/saffra-hat.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Saffra — The AI Chef in Your Pocket">
-  <meta name="twitter:description" content="Chef Saffra helps you make anything. The AI cooking partner who knows your kitchen.">
+  <meta name="twitter:description" content="Chef Saffra helps you make anything. Built like a chef, not a chatbot.">
   <meta name="twitter:image" content="https://drvanus.github.io/saffra-app/saffra-hat.png">
 
   <link rel="icon" type="image/png" href="saffra-hat.png">
@@ -529,6 +529,46 @@
       background: var(--secondary);
     }
 
+    /* Intelligence section — the "why she's actually a chef" credibility layer */
+    .intelligence-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 48px;
+    }
+    .intelligence-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 16px; padding: 26px 24px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .intelligence-card:hover {
+      border-color: rgba(224,130,48,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(224,130,48,0.06), 0 0 60px rgba(224,130,48,0.04);
+    }
+    .intelligence-card .icon-box { margin-bottom: 16px; width: 48px; height: 48px; }
+    .intelligence-card .icon-box svg { width: 22px; height: 22px; }
+    .intelligence-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; line-height: 1.3; letter-spacing: -0.01em; }
+    .intelligence-card p { font-size: 0.88rem; color: var(--muted-fg); line-height: 1.65; }
+    .intelligence-card p strong { color: var(--primary-light); font-weight: 600; }
+    .intel-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+      margin-top: 32px;
+    }
+    .intel-stat {
+      background: rgba(224,130,48,0.04); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px; text-align: center;
+    }
+    .intel-stat-num { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+    .intel-stat-label {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted-fg); margin-top: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .intelligence-grid { grid-template-columns: 1fr; }
+      .intel-stats { grid-template-columns: 1fr; }
+    }
+
     /* Features */
     .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 40px; }
     .feature-card {
@@ -564,13 +604,21 @@
     .step p { font-size: 0.85rem; color: var(--muted-fg); max-width: 240px; margin: 0 auto; line-height: 1.55; }
 
     /* Pricing */
-    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px;
+      align-items: stretch;
+    }
     .price-card {
       background: rgba(255,255,255,0.02); border: 1px solid var(--border);
       border-radius: 16px; padding: 32px 24px; position: relative;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       transition: all 0.3s ease;
+      /* Flex column so the bullet list can grow to fill remaining vertical
+         space and the CTA button pins to the bottom. Without this, cards
+         with fewer bullets (Lifetime) sit their button mid-card while the
+         taller Pro card's button anchors lower — visually misaligned. */
+      display: flex; flex-direction: column;
     }
     .price-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
     .price-card.featured {
@@ -590,7 +638,10 @@
     .price-card .price-sub { font-size: 0.8rem; color: var(--muted-fg); margin-top: 4px; }
     .price-amount { font-size: 2.5rem; font-weight: 800; margin: 20px 0 2px; letter-spacing: -0.02em; }
     .price-period { font-size: 0.8rem; color: var(--muted-fg); }
-    .price-features { list-style: none; margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .price-features {
+      list-style: none; margin-top: 24px; display: flex; flex-direction: column; gap: 10px;
+      flex: 1;  /* Pushes the CTA button to the bottom across all 3 cards. */
+    }
     .price-features li {
       font-size: 0.82rem; color: var(--muted-fg);
       display: flex; align-items: flex-start; gap: 8px;
@@ -612,8 +663,12 @@
     }
     .faq-q .faq-icon { flex-shrink: 0; margin-left: 16px; color: var(--primary); font-size: 1.2rem; transition: transform 0.2s; }
     .faq-item.open .faq-icon { transform: rotate(45deg); }
-    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-    .faq-item.open .faq-a { max-height: 400px; }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
+    /* Bumped from 400px — some answers now run longer (the AI / accuracy /
+       allergens entries) and were getting clipped at the bottom. 800px is
+       enough headroom for any current answer; the transition still feels
+       crisp because most answers stop well short of the cap. */
+    .faq-item.open .faq-a { max-height: 800px; }
     .faq-a p { padding: 0 0 20px; font-size: 0.88rem; color: var(--muted-fg); line-height: 1.65; }
 
     /* CTA */
@@ -718,8 +773,9 @@
       <span>Saffra</span>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="#how-it-works">How It Works</a>
+      <a href="#intelligence">The AI</a>
       <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="#signup" class="nav-cta">Get Early Access</a>
@@ -842,6 +898,67 @@
         <div class="chat-tool">Checking your pantry · 9 items</div>
         <div class="chat-bubble chat-chef">Quick one: let's do a skillet chicken thigh in a cilantro-tomato pan sauce over rice. Thirty minutes flat, one pan.</div>
         <div class="chat-bubble chat-chef" style="margin-bottom:0">The cilantro's going yellow — perfect time to use it. Want me to walk you through it hands-free?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Built like a chef — the AI / intelligence layer -->
+<section id="intelligence">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">The Intelligence Layer</span>
+      <h2 class="section-title">Built like a chef,<br><span class="gradient-text-warm">not a chatbot.</span></h2>
+      <p class="section-desc" style="margin:14px auto 0">Generic "AI cooking" tools paste a recipe into a chatbot and call it a day. Every layer of Saffra is built for cooking specifically — with knowledge, memory, and rules a general-purpose AI doesn't have.</p>
+    </div>
+
+    <div class="intelligence-grid">
+      <div class="intelligence-card anim anim-d1">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg></div>
+        <h3>A real chef persona — not a generic LLM</h3>
+        <p>Powered by <strong>Claude Opus 4.7</strong>, Anthropic's most capable model, guided by a custom <strong>250-line chef system prompt</strong> we wrote ourselves. Saffra has a name, a voice, signature moves, hard safety rules, and a tone that calibrates to your skill: beginners get sensory cues ("when oil shimmers, when it smells nutty"), pros get terse technique-first ("hit it with a nappé"). One model, infinite cooks.</p>
+      </div>
+      <div class="intelligence-card anim anim-d2">
+        <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <h3>A curated kitchen — not random internet recipes</h3>
+        <p>When you ask for a dish, Saffra doesn't improvise. She searches a real recipe library — <strong>hand-curated flagship recipes</strong> across 13+ cuisines plus <strong>230,000 CC0-licensed recipes</strong> seeded into a semantic-search index using <strong>Voyage AI embeddings</strong>. You get the closest real recipe, not a hallucinated one. Then she adapts it for your pantry, your skill, your equipment.</p>
+      </div>
+      <div class="intelligence-card anim anim-d3">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>Memory that compounds</h3>
+        <p>Rolling conversation summaries. Cook history with star ratings. Live pantry awareness. Recent-suggestion tracking so she doesn't pitch the same dish twice. The <strong>longer you cook with her, the sharper she gets</strong> — leaning into what you loved, steering around what flopped, varying within genres you've succeeded at, never repeating last Tuesday's dinner unless you ask.</p>
+      </div>
+      <div class="intelligence-card anim anim-d4">
+        <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+        <h3>Nine specialized tools, used silently</h3>
+        <p>Saffra doesn't just talk — she <em>works</em>. She has nine purpose-built tools: <strong>pantry search, recipe lookup, recipe adaptation, ingredient substitution, technique explainer, voice timers, unit conversion, recipe saving, profile updates</strong>. She picks the right tools for each turn and chains them — "what's for dinner?" might fire pantry-search → recipe-lookup → adapt-for-user, all silently before answering.</p>
+      </div>
+      <div class="intelligence-card anim anim-d1">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Allergen safety as a hard rule</h3>
+        <p>Declared allergies are <strong>non-negotiable</strong> — encoded as hard refusal rules in her system prompt, not soft suggestions. She'll either swap loud and clear or pass on the recipe entirely. Cross-contamination flags for serious allergies (peanut, tree nut, shellfish, sesame, gluten-for-celiac). USDA-safe internal temperatures cited in every recipe that needs one.</p>
+      </div>
+      <div class="intelligence-card anim anim-d2">
+        <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></div>
+        <h3>A voice built for a real kitchen</h3>
+        <p>Streaming <strong>ElevenLabs TTS</strong> with eight chef voices, served from a content-addressed cache so the same line never re-renders twice. Speech recognition runs <strong>on-device via Apple's Speech framework</strong> — your voice never leaves the phone unless on-device accuracy fails. The wake phrase "hey chef" is only armed inside Cooking Mode, never app-wide. Voice timers land in Live Activities, including the Dynamic Island.</p>
+      </div>
+    </div>
+
+    <div class="intel-stats anim anim-d3">
+      <div class="intel-stat">
+        <div class="intel-stat-num gradient-text-warm">Opus 4.7</div>
+        <div class="intel-stat-label">Anthropic's Top Model</div>
+      </div>
+      <div class="intel-stat">
+        <div class="intel-stat-num gradient-text-warm">9 tools</div>
+        <div class="intel-stat-label">Chef-Specific, Chained</div>
+      </div>
+      <div class="intel-stat">
+        <div class="intel-stat-num gradient-text-warm">230k+</div>
+        <div class="intel-stat-label">Recipes Indexed</div>
       </div>
     </div>
   </div>
@@ -995,14 +1112,27 @@
       <h2 class="section-title">Common <span class="gradient-text-warm">questions.</span></h2>
     </div>
     <div class="faq-list">
-      <div class="faq-item"><button class="faq-q">How is Saffra different from a recipe site or ChatGPT?<span class="faq-icon">+</span></button><div class="faq-a"><p>Recipe sites don't know what's in your fridge. ChatGPT doesn't either, and it doesn't remember the last thing you cooked. Saffra is built for cooking specifically — she checks your pantry before suggesting anything, rewrites every recipe for your skill and equipment, and remembers what you've loved (and what you haven't). She also handles allergens with hard rules, not vibes — a declared allergy is non-negotiable.</p></div></div>
-      <div class="faq-item"><button class="faq-q">What does "she helps you make anything" actually mean?<span class="faq-icon">+</span></button><div class="faq-a"><p>Anything. Any cuisine — Thai, Mexican regional, Korean, Vietnamese, French, classic Italian to Sicilian-specific. Any dietary world — vegan, keto, halal, FODMAP, Whole30. Any skill — from someone who's never cooked chicken to a home cook plating sous-vide. Any kitchen — induction-only, no oven, cast iron only, sous vide. She calibrates to you.</p></div></div>
-      <div class="faq-item"><button class="faq-q">How does she know what's in my pantry?<span class="faq-icon">+</span></button><div class="faq-a"><p>You tell her — but quickly. Snap a grocery receipt or scan a barcode and items land in your pantry pre-categorized, with expiration dates and allergen flags. Or just type things in. As you cook, she tracks what's used and what's running low. Items going off get surfaced for tonight's dinner instead of going in the trash.</p></div></div>
-      <div class="faq-item"><button class="faq-q">Do I have to use voice?<span class="faq-icon">+</span></button><div class="faq-a"><p>Never. Text-mode chat is the default and works the same. Voice mode is for when your hands are deep in dough or holding a knife. Toggle it per-session in Settings, or use Cooking Mode for full hands-free narration with the wake phrase "hey chef." Free tier is text-only; Pro unlocks voice.</p></div></div>
-      <div class="faq-item"><button class="faq-q">What about allergies and food safety?<span class="faq-icon">+</span></button><div class="faq-a"><p>Allergens are non-negotiable. Once you declare one in your profile, she will either substitute it (loud and clear, named) or pass on the recipe entirely — never quietly proceed. Adapted recipes carry a persistent allergen disclaimer banner. USDA-safe internal temperatures show up in every recipe that needs them. That said: Saffra is an AI. She's very capable but always verify allergens and cooking temperatures yourself, and she's not a substitute for medical or dietary advice.</p></div></div>
-      <div class="faq-item"><button class="faq-q">Is the free tier actually usable?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Free gives you 10 chef messages a day, full recipe-library browse, one recipe adaptation, pantry tracking, and safety guardrails. Pro adds the things you'd reach for daily — unlimited chat, voice cooking, receipt scanning, and a personal recipe library that learns you.</p></div></div>
-      <div class="faq-item"><button class="faq-q">When is Saffra launching?<span class="faq-icon">+</span></button><div class="faq-a"><p>We're heading into TestFlight beta now. Sign up for early access above and you'll be among the first cooks invited in. iOS first; the rest of the platforms come after.</p></div></div>
-      <div class="faq-item"><button class="faq-q">What about my data?<span class="faq-icon">+</span></button><div class="faq-a"><p>Sign in with Apple. We never track you. We never sell data. Your conversation, pantry, and preferences stay yours. Voice transcription runs on-device by default — only the text reaches our servers, not the audio.</p></div></div>
+      <div class="faq-item"><button class="faq-q">How is Saffra different from a recipe site or ChatGPT?<span class="faq-icon">+</span></button><div class="faq-a"><p>Recipe sites don't know what's in your fridge. ChatGPT doesn't either — and it doesn't remember the last thing you cooked, doesn't search a real recipe library before answering, and doesn't have hard rules for allergens. Saffra is built for cooking specifically: she calls a pantry tool before every suggestion, retrieves recipes from a curated index instead of improvising, remembers your cook history with star ratings, and treats declared allergies as a hard refusal rule, not a soft hint. The chef persona itself is a 250-line system prompt with explicit safety rules, tone calibration by skill level, and signature behaviors — none of which a generic chatbot has.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">What's actually powering Saffra?<span class="faq-icon">+</span></button><div class="faq-a"><p>The brain is <strong>Claude Opus 4.7</strong> — Anthropic's most capable model — with <strong>Claude Haiku 4.5</strong> as a faster utility model for simple tasks (parsing receipts, folding old conversations into summaries). The chef persona is a custom 250-line system prompt we wrote and maintain. Recipe search runs on <strong>Voyage AI embeddings</strong> over our curated library. Voice synthesis is <strong>ElevenLabs streaming TTS</strong>, content-addressed cached so the same line never renders twice. Speech recognition runs on-device via Apple's Speech framework. Image OCR for receipts and cookbook pages also runs on-device, via Apple's Vision framework — your photos never leave your phone.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">How accurate is the cooking advice?<span class="faq-icon">+</span></button><div class="faq-a"><p>Two things keep her grounded. <strong>One</strong>: when you ask for a specific dish or "what should I cook?", she calls a tool that searches our curated recipe library — hand-curated flagship recipes plus 230,000 CC0-licensed recipes — instead of improvising one from memory. So you get a real recipe, adapted for you, not a hallucination. <strong>Two</strong>: for techniques and substitutions she calls dedicated tools (technique explainer, substitution lookup) rather than guessing. She also won't claim to have personally tasted something — she'll say "by the numbers, this should read bright and savory" instead of "I love this." If she's not sure, she says so.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">What does "she helps you make anything" actually mean?<span class="faq-icon">+</span></button><div class="faq-a"><p>Anything. Any cuisine — Thai, Mexican regional (Oaxacan vs. Yucatecan vs. Norteño), Korean, Vietnamese, French classical to bistro, Sicilian vs. Emilia-Romagna vs. Roman Italian, Chinese regional (Sichuan, Cantonese, Hunan), West African, Levantine, Peruvian. Cuisines outside our named list get the same regional-and-technique-first reasoning, never a generic "Asian" answer. Any dietary world — vegan, keto, halal, kosher, FODMAP, Whole30, celiac (with cross-contamination awareness). Any skill — from someone who's never cooked chicken (sensory cues, every technique explained) to a sous-vide-plating home cook (terse, technique-first). Any kitchen — induction-only, no oven, cast iron only, full restaurant brigade. She calibrates to you.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">Will she remember what I've cooked?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Conversations are persisted, your pantry is tracked, and recipes you rate 4-5 stars influence future suggestions. After about 24 turns the older messages fold into a compact summary so context stays sharp without bloating. She knows what you've cooked recently (and won't repeat last Tuesday's dinner unless you ask), what you've loved, and what fell flat. Her system prompt explicitly tells her to weight suggestions toward your wins, vary within genres you've succeeded at, and treat anything she's already pitched in this thread as off the table.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">How does she know what's in my pantry?<span class="faq-icon">+</span></button><div class="faq-a"><p>You tell her — but quickly. Snap a grocery receipt and on-device OCR extracts the lines, then Haiku 4.5 parses them into clean line items (your photo never leaves the phone). Or scan a barcode — the lookup runs against Open Food Facts and items land in your pantry pre-tagged with category, expiration, and allergen flags. Or just type things in. As you cook, she tracks what's used and what's running low. Items going off ("the cilantro's gone yellow") get surfaced for tonight's dinner instead of going in the trash.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">Do I have to use voice?<span class="faq-icon">+</span></button><div class="faq-a"><p>Never. Text-mode chat is the default and works exactly the same. Voice mode is for when your hands are deep in dough or holding a knife. Toggle it per-session in Settings, or open Cooking Mode for full hands-free narration with the wake phrase "hey chef" — note that the wake phrase is <em>only</em> armed inside Cooking Mode, never app-wide, so the mic isn't listening when you're not cooking. Voice timers fire silently and land in Live Activities (Lock Screen + Dynamic Island). Free tier is text-only; Pro unlocks voice cooking.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">What about allergies and food safety?<span class="faq-icon">+</span></button><div class="faq-a"><p>Allergens are <strong>non-negotiable</strong>. Once you declare one in your profile, she will either substitute the offending ingredient (loud and clear, named in the response) or refuse the recipe entirely and offer a genuinely good alternative — never quietly proceed. For serious allergies (peanut, tree nut, shellfish, sesame, gluten-for-celiac) she also flags cross-contamination risks in shared oils, fryers, cutting boards. Adapted recipes carry a persistent allergen disclaimer banner in-app. USDA-safe internal temperatures appear in every recipe that needs them — chicken at 165°F, ground beef 160°F, salmon 125-130°F. That said: Saffra is an AI. She's very capable but always verify allergens and cooking temperatures yourself, and she's not a substitute for medical or dietary advice.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">Is the free tier actually usable?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Free gives you 10 chef messages a day, full recipe-library browse, 1 recipe adaptation to feel the magic, pantry tracking, and every safety guardrail. Pro adds the things you'd reach for daily — unlimited chat, voice cooking with eight premium chef voices, every recipe rewritten for your kitchen, receipt &amp; barcode scanning, recipe import from URLs and cookbook photos, and a personal library that learns your taste over time.</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">When is Saffra launching?<span class="faq-icon">+</span></button><div class="faq-a"><p>We're heading into TestFlight beta now. Sign up for early access above and you'll be among the first cooks invited in. iOS first; other platforms come after we've nailed the iPhone experience. We're going for "actually delightful," not "ship it now and patch later."</p></div></div>
+
+      <div class="faq-item"><button class="faq-q">What about my data?<span class="faq-icon">+</span></button><div class="faq-a"><p>Sign in with Apple. We never sell data. We never use your conversations to train models. We never track you across apps or websites. Voice transcription runs on-device by default — only the text reaches our server, never the audio. Receipt and cookbook photos run through Apple's Vision framework on your phone — only the extracted text leaves the device. You can delete your account and every byte of your data from Profile / Me at any time. Full policy at <a href="privacy.html" style="color:#F5C088;text-decoration:underline">/privacy</a>.</p></div></div>
     </div>
   </div>
 </section>
@@ -1038,7 +1168,7 @@
         </a>
         <p>The AI chef in your pocket. Make anything — any cuisine, any kitchen, any skill.</p>
       </div>
-      <div class="footer-col"><h4>Product</h4><ul><li><a href="#how-it-works">How It Works</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#intelligence">The AI</a></li><li><a href="#features">Features</a></li><li><a href="#how-it-works">How It Works</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
       <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hello@saffra.app">hello@saffra.app</a></li><li><a href="https://github.com/DrVanus/saffra-app" target="_blank" rel="noopener">GitHub</a></li></ul></div>
     </div>
