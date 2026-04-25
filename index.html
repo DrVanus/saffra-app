@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saffra — The AI Chef in Your Pocket</title>
+  <meta name="description" content="Chef Saffra helps you make anything. The AI cooking partner who knows your pantry, your skill, and your allergies — and rewrites every recipe for you. Voice-first, hands-free.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://drvanus.github.io/saffra-app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Saffra — The AI Chef in Your Pocket">
+  <meta property="og:description" content="Chef Saffra helps you make anything. AI cooking partner who knows your kitchen. Voice-first, hands-free.">
+  <meta property="og:url" content="https://drvanus.github.io/saffra-app/">
+  <meta property="og:site_name" content="Saffra">
+  <meta property="og:image" content="https://drvanus.github.io/saffra-app/saffra-hat.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Saffra — The AI Chef in Your Pocket">
+  <meta name="twitter:description" content="Chef Saffra helps you make anything. The AI cooking partner who knows your kitchen.">
+  <meta name="twitter:image" content="https://drvanus.github.io/saffra-app/saffra-hat.png">
+
+  <link rel="icon" type="image/png" href="saffra-hat.png">
+  <link rel="apple-touch-icon" href="saffra-hat.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0E0C0A;
+      --fg: #F5EFE5;
+      --card: #1A1612;
+      --card-fg: #F5EFE5;
+      --primary: #E08230;
+      --primary-fg: #ffffff;
+      --primary-dark: #B8651C;
+      --primary-light: #F5C088;
+      --secondary: #5BA15F;
+      --secondary-dark: #3B7A3F;
+      --muted: #1A1612;
+      --muted-fg: #9A8E80;
+      --accent: #2A1A0E;
+      --accent-fg: #F5EFE5;
+      --warm-cream: #F5C088;
+      --border: rgba(224,130,48,0.14);
+      --primary-glow: rgba(224,130,48,0.10);
+      --radius: 0.625rem;
+    }
+
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container { max-width: 1152px; margin: 0 auto; padding: 0 24px; }
+
+    .gradient-text-warm {
+      background: linear-gradient(135deg, #F5C088 0%, #E08230 50%, #B8651C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-text-green {
+      background: linear-gradient(135deg, #8FCB93 0%, #5BA15F 50%, #3B7A3F 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .italic-anything {
+      font-family: 'Playfair Display', 'Inter', serif;
+      font-style: italic;
+      font-weight: 600;
+      background: linear-gradient(135deg, #F5C088 0%, #E08230 50%, #B8651C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .btn-warm {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #E08230, #B8651C);
+      color: #ffffff;
+      font-weight: 700; font-size: 0.9rem; font-family: inherit;
+      border-radius: 12px; border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(224,130,48,0.25);
+      transition: all 0.2s ease;
+      letter-spacing: 0.01em;
+    }
+    .btn-warm:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(224,130,48,0.4); background: linear-gradient(135deg, #F09848, #C97520); }
+    .btn-warm svg { width: 16px; height: 16px; }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px;
+      background: rgba(224,130,48,0.05);
+      color: #F5C088;
+      font-weight: 600; font-size: 0.9rem; font-family: inherit;
+      border-radius: 12px; border: 1px solid var(--border); cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-outline:hover { background: rgba(224,130,48,0.1); border-color: rgba(224,130,48,0.3); }
+
+    .section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 2.5rem; font-weight: 800; line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .section-desc {
+      font-size: 1.05rem; color: var(--muted-fg);
+      max-width: 600px; margin-top: 14px; line-height: 1.65;
+    }
+
+    section { padding: 96px 0; }
+
+    .section-divider {
+      height: 1px; max-width: 768px; margin: 0 auto;
+      background: linear-gradient(90deg, transparent, rgba(224,130,48,0.2), transparent);
+      position: relative;
+    }
+    .section-divider::after {
+      content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 16px;
+      background: radial-gradient(ellipse, rgba(224,130,48,0.08), transparent);
+    }
+
+    /* Icons */
+    .icon-box {
+      width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(224,130,48,0.08);
+      border: 1px solid var(--border);
+      border-radius: 10px; flex-shrink: 0;
+    }
+    .icon-box svg { width: 20px; height: 20px; color: var(--primary); stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-box.green { background: rgba(91,161,95,0.10); border-color: rgba(91,161,95,0.18); }
+    .icon-box.green svg { color: var(--secondary); }
+
+    /* Animations */
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(32px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); }
+      50% { opacity: 0.55; transform: translate(-50%,-50%) scale(1.05); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .anim { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+    .anim.visible { opacity: 1; transform: translateY(0); }
+    .anim-d1 { transition-delay: 0.1s; }
+    .anim-d2 { transition-delay: 0.2s; }
+    .anim-d3 { transition-delay: 0.3s; }
+    .anim-d4 { transition-delay: 0.4s; }
+    .anim-d5 { transition-delay: 0.5s; }
+    .anim-d6 { transition-delay: 0.6s; }
+    .anim-d7 { transition-delay: 0.7s; }
+
+    /* Shimmer on gradient text */
+    .shimmer-text {
+      background: linear-gradient(90deg, #F5C088 0%, #E08230 40%, #F5C088 60%, #E08230 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    /* Platform badge */
+    .platform-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 16px; border-radius: 20px;
+      background: rgba(224,130,48,0.05);
+      border: 1px solid var(--border);
+      font-size: 0.78rem; font-weight: 500; color: var(--muted-fg);
+      margin-bottom: 20px;
+      animation: fade-in-up 0.8s ease both;
+    }
+    .platform-badge span { color: #F5C088; }
+
+    /* Scroll to top */
+    .scroll-top {
+      position: fixed; bottom: 24px; right: 24px; z-index: 50;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(224,130,48,0.15); border: 1px solid var(--border);
+      border-radius: 10px; cursor: pointer;
+      opacity: 0; transform: translateY(10px);
+      transition: all 0.3s ease; pointer-events: none;
+    }
+    .scroll-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .scroll-top:hover { background: rgba(224,130,48,0.25); }
+    .scroll-top svg { width: 18px; height: 18px; color: var(--primary); stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* Pricing toggle */
+    .pricing-toggle {
+      display: inline-flex; gap: 4px; justify-content: center; margin-top: 20px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 4px;
+    }
+    .pricing-toggle-wrap { text-align: center; margin-top: 20px; }
+    .toggle-btn {
+      padding: 8px 20px; border-radius: 8px; border: none;
+      background: transparent; color: var(--muted-fg);
+      font-size: 0.85rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .toggle-btn.active { background: linear-gradient(135deg, #E08230, #B8651C); color: #fff; }
+    .toggle-save { font-size: 0.7rem; color: #F5C088; font-weight: 600; opacity: 0.85; }
+
+    /* Navbar */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(14,12,10,0.7);
+      backdrop-filter: saturate(180%) blur(16px);
+      -webkit-backdrop-filter: saturate(180%) blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; letter-spacing: -0.01em; }
+    .nav-logo .logo-mark {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(245,192,136,0.15), rgba(184,101,28,0.05));
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(224,130,48,0.20);
+      overflow: hidden;
+    }
+    .nav-logo .logo-mark img { width: 28px; height: 28px; object-fit: contain; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { font-size: 0.85rem; color: var(--muted-fg); transition: color 0.2s; font-weight: 500; }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a.nav-cta {
+      padding: 8px 18px; background: linear-gradient(135deg, #E08230, #B8651C);
+      color: #ffffff; font-weight: 700; font-size: 0.8rem;
+      border-radius: 8px; transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(224,130,48,0.3);
+    }
+    .nav-links a.nav-cta:hover { box-shadow: 0 4px 16px rgba(224,130,48,0.4); background: linear-gradient(135deg, #F09848, #C97520); }
+    .nav-toggle { display: none; background: none; border: none; color: var(--fg); cursor: pointer; padding: 4px; }
+    .nav-toggle svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* Hero */
+    .hero {
+      padding: 140px 0 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero-layout {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    @media (min-width: 1100px) {
+      .hero-layout {
+        flex-direction: row; align-items: center; gap: 56px; text-align: left;
+      }
+      .hero-text { flex: 1; min-width: 0; }
+      .hero-screenshot { margin-top: 0 !important; flex-shrink: 0; }
+      .hero h1 { margin: 0; }
+      .hero .subtitle { margin: 20px 0 0; }
+      .hero-buttons { justify-content: flex-start; }
+      .hero .platform-badge { display: inline-flex; }
+      .hero-phone-frame { max-width: none; }
+    }
+    @media (min-width: 1100px) and (max-width: 1250px) {
+      .hero h1 { font-size: 2.8rem; }
+      .hero-phone-frame .phone-placeholder { max-height: 460px; }
+      .hero-layout { gap: 40px; }
+    }
+    .hero::before {
+      content: ''; position: absolute; top: calc(30% - var(--parallax, 0px)); left: 50%;
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse, rgba(224,130,48,0.10), transparent 65%);
+      pointer-events: none;
+      animation: pulse-glow 5s ease-in-out infinite;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: 60%; left: 30%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(91,161,95,0.05), transparent 60%);
+      pointer-events: none;
+      animation: pulse-glow 7s ease-in-out 1s infinite;
+    }
+    .hero h1 {
+      font-size: 3.5rem; font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.03em; max-width: 800px; margin: 0 auto;
+      animation: fade-in-up 0.8s ease both;
+      position: relative;
+    }
+    .hero .subtitle {
+      font-size: 1.1rem; color: var(--muted-fg); max-width: 580px;
+      margin: 20px auto 0; line-height: 1.7;
+      animation: fade-in-up 0.8s ease 0.15s both;
+      position: relative;
+    }
+    .hero-buttons {
+      display: flex; gap: 14px; justify-content: center; margin-top: 32px; flex-wrap: wrap;
+      animation: fade-in-up 0.8s ease 0.3s both;
+      position: relative;
+    }
+    .hero-screenshot {
+      margin-top: 56px; display: flex; justify-content: center;
+      animation: fade-in-up 0.8s ease 0.45s both;
+      position: relative;
+    }
+    .hero-phone-wrap {
+      position: relative; display: inline-block;
+    }
+    .hero-phone-wrap::before {
+      content: ''; position: absolute; inset: -32px;
+      border-radius: 3rem;
+      background: radial-gradient(ellipse, rgba(224,130,48,0.16), transparent 70%);
+      filter: blur(30px);
+      pointer-events: none;
+    }
+    .hero-phone-frame {
+      position: relative;
+      border-radius: 2.5rem;
+      border: 2.5px solid rgba(224,130,48,0.25);
+      background: #000;
+      padding: 8px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(224,130,48,0.1), 0 0 80px rgba(224,130,48,0.06);
+      overflow: hidden;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .hero-phone-frame .phone-screen {
+      position: relative;
+      border-radius: 2rem;
+      overflow: hidden;
+    }
+    /* Phone screens */
+    .phone-placeholder {
+      width: 264px; max-height: 520px; min-height: 480px;
+      border-radius: 2rem;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      padding: 24px 20px;
+      font-family: 'Inter', sans-serif;
+    }
+    .phone-placeholder.screen-chef {
+      background: linear-gradient(180deg, #1A1612 0%, #0E0C0A 100%);
+    }
+    .phone-placeholder.screen-cooking {
+      background: linear-gradient(180deg, #1A1612 0%, #0E0C0A 100%);
+    }
+    .phone-placeholder .phone-header {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--primary); margin-bottom: 16px;
+      text-align: center; align-self: stretch;
+    }
+    .phone-placeholder .phone-greeting {
+      width: 100%;
+      font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 4px;
+      text-align: left;
+    }
+    .phone-placeholder .phone-greet-sub {
+      width: 100%;
+      font-size: 0.72rem; color: var(--muted-fg); margin-bottom: 14px;
+      text-align: left;
+    }
+    .phone-placeholder .phone-pills { display: flex; gap: 6px; flex-wrap: wrap; align-self: stretch; margin-bottom: 16px; }
+    .phone-placeholder .phone-pill {
+      padding: 4px 10px; border-radius: 12px;
+      background: rgba(224,130,48,0.10); border: 1px solid var(--border);
+      font-size: 0.62rem; color: #F5C088; font-weight: 600;
+    }
+    .phone-placeholder .phone-pill.green {
+      background: rgba(91,161,95,0.12); border-color: rgba(91,161,95,0.22); color: #8FCB93;
+    }
+    .phone-placeholder .phone-quick {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .phone-placeholder .phone-quick-icon {
+      width: 24px; height: 24px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #E08230, #B8651C);
+      color: #fff; font-size: 0.72rem;
+    }
+    .phone-placeholder .phone-quick-icon.green { background: linear-gradient(135deg, #5BA15F, #3B7A3F); }
+    .phone-placeholder .phone-quick-text { font-size: 0.72rem; font-weight: 600; color: #fff; flex: 1; line-height: 1.3; }
+
+    .phone-placeholder .cooking-step-num {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #F5C088, #E08230);
+      color: #fff; font-weight: 800; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px; box-shadow: 0 4px 16px rgba(224,130,48,0.35);
+    }
+    .phone-placeholder .cooking-step-text {
+      font-size: 0.82rem; color: #fff; line-height: 1.5; text-align: center;
+      max-width: 220px; margin-bottom: 18px;
+    }
+    .phone-placeholder .cooking-timer {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 10px;
+      background: rgba(224,130,48,0.10); border: 1px solid var(--border);
+      font-size: 0.72rem; color: #F5C088; font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .phone-placeholder .cooking-voice {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.65rem; color: var(--muted-fg); font-weight: 500;
+      margin-top: auto;
+    }
+    .phone-placeholder .cooking-voice .voice-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--primary);
+      animation: breathe 1.6s ease-in-out infinite;
+    }
+
+    @keyframes crossfade {
+      0%, 42% { opacity: 1; }
+      50%, 92% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .hero-phone-frame .phone-back {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .hero-phone-frame .phone-front {
+      position: relative; z-index: 1;
+      animation: crossfade 10s ease-in-out infinite;
+    }
+
+    /* Stats */
+    .stats {
+      padding: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(224,130,48,0.03), transparent, rgba(91,161,95,0.03));
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .stat-item {
+      padding: 40px 16px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+    .stat-label {
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--muted-fg); margin-top: 6px;
+    }
+
+    /* Concept Section */
+    .concept-section {
+      position: relative;
+      background-image: radial-gradient(rgba(224,130,48,0.06) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .concept-section::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(224,130,48,0.06), transparent 55%);
+      pointer-events: none;
+    }
+    .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-top: 48px; }
+    .concept-features { display: flex; flex-direction: column; gap: 28px; }
+    .concept-feature { display: flex; gap: 16px; align-items: flex-start; }
+    .concept-feature h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 5px; }
+    .concept-feature p { font-size: 0.85rem; color: var(--muted-fg); line-height: 1.55; }
+
+    .chat-preview {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; position: relative;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.4), 0 0 40px rgba(224,130,48,0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .chat-label {
+      font-size: 0.65rem; color: var(--muted-fg); text-transform: uppercase;
+      letter-spacing: 0.12em; margin-bottom: 16px; font-weight: 600;
+      opacity: 0.7;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .chat-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+    }
+    .chat-bubble {
+      padding: 12px 16px; border-radius: 12px; font-size: 0.85rem;
+      line-height: 1.55; margin-bottom: 10px; max-width: 88%;
+    }
+    .chat-user {
+      background: rgba(224,130,48,0.12); border: 1px solid var(--border);
+      margin-left: auto; color: #F5C088;
+    }
+    .chat-chef {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    }
+    .chat-tool {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; margin: 6px 0;
+      border-radius: 8px;
+      background: rgba(91,161,95,0.10); border: 1px solid rgba(91,161,95,0.20);
+      font-size: 0.7rem; color: #8FCB93; font-weight: 600;
+    }
+    .chat-tool::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--secondary);
+    }
+
+    /* Features */
+    .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 40px; }
+    .feature-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .feature-card::before {
+      content: ''; position: absolute; inset: -1px; border-radius: 17px;
+      background: linear-gradient(135deg, rgba(224,130,48,0.25), transparent 50%, rgba(224,130,48,0.15));
+      opacity: 0; transition: opacity 0.3s; z-index: -1;
+    }
+    .feature-card:hover { border-color: rgba(224,130,48,0.3); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(224,130,48,0.08), 0 0 60px rgba(224,130,48,0.04); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card .icon-box { margin-bottom: 14px; }
+    .feature-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .feature-card p { font-size: 0.82rem; color: var(--muted-fg); line-height: 1.55; }
+
+    /* Steps */
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+    .step { text-align: center; }
+    .step-num {
+      width: 44px; height: 44px; margin: 0 auto 16px;
+      background: linear-gradient(135deg, #E08230, #B8651C);
+      color: #ffffff; font-weight: 800; font-size: 1rem;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(224,130,48,0.30);
+    }
+    .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { font-size: 0.85rem; color: var(--muted-fg); max-width: 240px; margin: 0 auto; line-height: 1.55; }
+
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+    .price-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 24px; position: relative;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+    .price-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .price-card.featured {
+      border-color: var(--primary);
+      box-shadow: 0 0 50px rgba(224,130,48,0.10), 0 0 100px rgba(224,130,48,0.04);
+      background: linear-gradient(180deg, rgba(224,130,48,0.06), rgba(255,255,255,0.02) 40%);
+      transform: scale(1.02);
+    }
+    .price-card.featured:hover { transform: scale(1.02) translateY(-4px); box-shadow: 0 0 60px rgba(224,130,48,0.15), 0 12px 40px rgba(0,0,0,0.3); }
+    .price-badge {
+      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+      padding: 4px 14px; background: linear-gradient(135deg, #E08230, #B8651C);
+      color: #ffffff; font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; border-radius: 20px;
+    }
+    .price-card h3 { font-size: 1.15rem; font-weight: 700; }
+    .price-card .price-sub { font-size: 0.8rem; color: var(--muted-fg); margin-top: 4px; }
+    .price-amount { font-size: 2.5rem; font-weight: 800; margin: 20px 0 2px; letter-spacing: -0.02em; }
+    .price-period { font-size: 0.8rem; color: var(--muted-fg); }
+    .price-features { list-style: none; margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .price-features li {
+      font-size: 0.82rem; color: var(--muted-fg);
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .price-features li::before { content: '\2713'; color: var(--primary); font-weight: 700; flex-shrink: 0; }
+    .price-features li.off { color: rgba(154,142,128,0.4); text-decoration: line-through; }
+    .price-features li.off::before { content: '\2715'; color: rgba(154,142,128,0.3); }
+    .price-card .btn-warm, .price-card .btn-outline { width: 100%; justify-content: center; margin-top: 24px; }
+
+    /* FAQ */
+    .faq-list { max-width: 680px; margin: 40px auto 0; }
+    .faq-item { border-bottom: 1px solid var(--border); transition: background 0.2s; }
+    .faq-item:hover { background: rgba(224,130,48,0.02); }
+    .faq-q {
+      width: 100%; background: none; border: none; color: var(--fg);
+      font-size: 0.95rem; font-weight: 600; text-align: left;
+      padding: 20px 0; cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; font-family: inherit;
+    }
+    .faq-q .faq-icon { flex-shrink: 0; margin-left: 16px; color: var(--primary); font-size: 1.2rem; transition: transform 0.2s; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-item.open .faq-a { max-height: 400px; }
+    .faq-a p { padding: 0 0 20px; font-size: 0.88rem; color: var(--muted-fg); line-height: 1.65; }
+
+    /* CTA */
+    .cta-section { text-align: center; position: relative; overflow: hidden; }
+    .cta-section::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(224,130,48,0.10), transparent 60%);
+      pointer-events: none;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(91,161,95,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .signup-form { display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap; position: relative; z-index: 1; }
+    .signup-form input {
+      padding: 12px 18px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--fg); font-size: 0.9rem; font-family: inherit;
+      width: 300px; outline: none; transition: border-color 0.2s;
+    }
+    .signup-form input:focus { border-color: var(--primary); }
+    .signup-form input::placeholder { color: rgba(154,142,128,0.5); }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 48px 0; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+    .footer-brand p { font-size: 0.82rem; color: var(--muted-fg); margin-top: 12px; max-width: 280px; line-height: 1.55; }
+    .footer-col h4 { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(154,142,128,0.7); margin-bottom: 14px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { font-size: 0.82rem; color: var(--muted-fg); transition: color 0.2s; }
+    .footer-col a:hover { color: #F5C088; }
+    .footer-bottom {
+      margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72rem; color: rgba(154,142,128,0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 1099px) {
+      .section-title { font-size: 2.15rem; }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .concept-grid { gap: 40px; }
+      section { padding: 72px 0; }
+      .nav-links { gap: 20px; }
+      .nav-links a { font-size: 0.8rem; }
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: rgba(14,12,10,0.95); backdrop-filter: blur(16px);
+        padding: 20px 24px; gap: 16px; border-bottom: 1px solid var(--border);
+      }
+      .nav-toggle { display: block; }
+      .hero h1 { font-size: 2.5rem; }
+      .hero .subtitle { font-size: 1rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .concept-grid { grid-template-columns: 1fr; gap: 32px; }
+      .chat-preview { order: -1; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr; gap: 24px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      .section-title { font-size: 1.85rem; }
+      section { padding: 64px 0; }
+    }
+
+    @media (max-width: 767px) {
+      .hero h1 { font-size: 2.1rem; }
+      .hero { padding: 120px 0 60px; }
+      .pricing-grid { max-width: 380px; }
+      .stat-number { font-size: 1.55rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .signup-form { flex-direction: column; align-items: center; }
+      .signup-form input { width: 100%; }
+      .hero h1 { font-size: 1.85rem; }
+      .hero { padding: 110px 0 48px; }
+      .container { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="logo-mark"><img src="saffra-hat.png" alt="Saffra"></div>
+      <span>Saffra</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#signup" class="nav-cta">Get Early Access</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-layout">
+      <div class="hero-text">
+        <div class="platform-badge">Coming Soon <span>to</span> iOS</div>
+        <h1>Make<br><span class="italic-anything">anything.</span></h1>
+        <p class="subtitle">Chef Saffra is the AI cooking partner who actually knows your kitchen. Tell her once what you have, what you don't eat, and how much time you've got. Every recipe gets rewritten for you.</p>
+        <div class="hero-buttons">
+          <a href="#signup" class="btn-warm">Get Early Access <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="#how-it-works" class="btn-outline">See How It Works</a>
+        </div>
+      </div>
+      <div class="hero-screenshot">
+        <div class="hero-phone-wrap">
+          <div class="hero-phone-frame">
+            <div class="phone-screen">
+              <!-- Back: Cooking Mode -->
+              <div class="phone-placeholder screen-cooking phone-back">
+                <div class="phone-header">Cooking · Step 3 of 6</div>
+                <div class="cooking-step-num">3</div>
+                <div class="cooking-step-text">Sear the thighs skin-down in a cold pan. Six minutes until the skin's deep gold and releases on its own.</div>
+                <div class="cooking-timer">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#F5C088" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 3h6"/></svg>
+                  Suggested timer: 6 min
+                </div>
+                <div class="cooking-voice">
+                  <span class="voice-dot"></span>
+                  Listening · say "hey chef, next step"
+                </div>
+              </div>
+              <!-- Front: Chef chat -->
+              <div class="phone-placeholder screen-chef phone-front">
+                <div class="phone-header">Chef</div>
+                <div class="phone-greeting">Good evening 🌅</div>
+                <div class="phone-greet-sub">What can I help you cook?</div>
+                <div class="phone-pills">
+                  <span class="phone-pill">Dinner in 30 min</span>
+                  <span class="phone-pill green">12 items in pantry</span>
+                </div>
+                <div class="phone-quick">
+                  <div class="phone-quick-icon">⚡</div>
+                  <div class="phone-quick-text">What can I make with what I have?</div>
+                </div>
+                <div class="phone-quick">
+                  <div class="phone-quick-icon green">🌿</div>
+                  <div class="phone-quick-text">Use what's about to turn</div>
+                </div>
+                <div class="phone-quick">
+                  <div class="phone-quick-icon">🔥</div>
+                  <div class="phone-quick-text">Quick 25-minute dinner for two</div>
+                </div>
+                <div class="phone-quick">
+                  <div class="phone-quick-icon">🛡</div>
+                  <div class="phone-quick-text">Adapt a recipe for my allergies</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-number gradient-text-warm">230k+</div><div class="stat-label">Recipes Seeded</div></div>
+      <div class="stat-item"><div class="stat-number gradient-text-warm">25+</div><div class="stat-label">Cuisines, Regional Depth</div></div>
+      <div class="stat-item"><div class="stat-number gradient-text-warm">5</div><div class="stat-label">Skill Levels, Calibrated</div></div>
+      <div class="stat-item"><div class="stat-number gradient-text-warm">100%</div><div class="stat-label">Hands-Free Voice</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- Concept Section -->
+<section class="concept-section" id="concept">
+  <div class="container">
+    <div class="anim">
+      <span class="section-label">How She's Different</span>
+      <h2 class="section-title">Your chef.<br><span class="gradient-text-warm">Your kitchen.</span></h2>
+      <p class="section-desc">Recipe sites don't care what's in your fridge. ChatGPT doesn't either. Saffra does — and she rewrites every recipe to fit you, the cook, before you start.</p>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-features anim">
+        <div class="concept-feature">
+          <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div><h4>Pantry-first</h4><p>She checks what you have before suggesting anything. If the cilantro's going yellow, that's tonight's dinner.</p></div>
+        </div>
+        <div class="concept-feature">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 1v22M19 12a7 7 0 0 1-14 0M9 8a3 3 0 0 1 6 0v4a3 3 0 0 1-6 0V8z"/></svg></div>
+          <div><h4>Voice-first Cooking Mode</h4><p>Messy hands? Say "hey chef, next step" and she narrates. Set timers by voice — they live in the Dynamic Island.</p></div>
+        </div>
+        <div class="concept-feature">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M16 4l4 4M3 12a9 9 0 0 1 9-9"/></svg></div>
+          <div><h4>Adapted for you</h4><p>Every recipe is rewritten for your pantry, equipment, allergies, and skill level. Beginners get sensory cues. Pros get the chef move.</p></div>
+        </div>
+        <div class="concept-feature">
+          <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><h4>Allergens never slip</h4><p>Declared allergies are non-negotiable. She'll swap loud and clear, or pass on a recipe entirely — never quietly proceed.</p></div>
+        </div>
+      </div>
+      <div class="chat-preview anim">
+        <div class="chat-label">A real chat with Saffra</div>
+        <div class="chat-bubble chat-user">What can I make tonight? I have maybe 30 minutes.</div>
+        <div class="chat-tool">Checking your pantry · 9 items</div>
+        <div class="chat-bubble chat-chef">Quick one: let's do a skillet chicken thigh in a cilantro-tomato pan sauce over rice. Thirty minutes flat, one pan.</div>
+        <div class="chat-bubble chat-chef" style="margin-bottom:0">The cilantro's going yellow — perfect time to use it. Want me to walk you through it hands-free?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Features -->
+<section id="features">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">Everything you need to<br><span class="gradient-text-warm">cook anything.</span></h2>
+      <p class="section-desc" style="margin:14px auto 0">Each feature exists for one reason: get you from "what should I cook" to dinner on the plate.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card anim anim-d1">
+        <div class="icon-box green"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M8 6V4M16 6V4"/></svg></div>
+        <h3>Pantry-first matching</h3>
+        <p>She suggests recipes that use what you already have. Items going off get used first. Less waste, fewer trips.</p>
+      </div>
+      <div class="feature-card anim anim-d2">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 1v22M19 12a7 7 0 0 1-14 0M9 8a3 3 0 0 1 6 0v4a3 3 0 0 1-6 0V8z"/></svg></div>
+        <h3>Hands-free Cooking Mode</h3>
+        <p>"Hey chef, next step." She listens the whole time you're cooking. Voice timers land in the Dynamic Island.</p>
+      </div>
+      <div class="feature-card anim anim-d3">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+        <h3>Adapted recipes</h3>
+        <p>Every recipe rewritten for your pantry, equipment, allergies, and skill — beginners get sensory cues, pros get the chef move.</p>
+      </div>
+      <div class="feature-card anim anim-d4">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+        <h3>Save any recipe</h3>
+        <p>Paste a URL, snap a cookbook page — Saffra imports it and adapts it for you. Build a personal library that learns your taste.</p>
+      </div>
+      <div class="feature-card anim anim-d1">
+        <div class="icon-box green"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10M7 12h10M7 17h6"/></svg></div>
+        <h3>Receipt &amp; barcode scanning</h3>
+        <p>Scan groceries straight into your pantry — items land with categories, expiration dates, and allergen flags pre-filled.</p>
+      </div>
+      <div class="feature-card anim anim-d2">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Allergen-aware, always</h3>
+        <p>Declared allergies are non-negotiable. She swaps loud and clear, or passes on the recipe — never quietly proceeds.</p>
+      </div>
+      <div class="feature-card anim anim-d3">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></div>
+        <h3>Skill calibration</h3>
+        <p>Tell her your level once. Beginners get every technique explained with sensory cues. Pros get terse, technique-first direction.</p>
+      </div>
+      <div class="feature-card anim anim-d4">
+        <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 3h6"/></svg></div>
+        <h3>Voice timers, Live Activities</h3>
+        <p>"Set rice for eighteen minutes." It's running. Multiple timers track on Lock Screen and Dynamic Island so you don't miss a beat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- How It Works -->
+<section id="how-it-works">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">Get Started</span>
+      <h2 class="section-title">Cook with Saffra in <span class="gradient-text-warm">4 steps.</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step anim"><div class="step-num">1</div><h3>Tell her your kitchen</h3><p>One-minute conversational onboarding. Diet, allergies, equipment, skill, the cuisines you love.</p></div>
+      <div class="step anim"><div class="step-num">2</div><h3>Ask what to cook</h3><p>She checks your pantry, your time, and what you've cooked before. Then names the dish — confidently, by you.</p></div>
+      <div class="step anim"><div class="step-num">3</div><h3>Cook hands-free</h3><p>Voice-first Cooking Mode reads you each step. Set timers by voice. Ask "why does this matter?" any time.</p></div>
+      <div class="step anim"><div class="step-num">4</div><h3>Save what you loved</h3><p>Rate the result. She remembers. Future suggestions lean into what worked, and quietly skip what didn't.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title">Simple <span class="gradient-text-warm">pricing.</span></h2>
+      <p class="section-desc" style="margin:14px auto 0">Start free. Upgrade when you're ready to cook with her every day.</p>
+      <div class="pricing-toggle-wrap">
+        <div class="pricing-toggle">
+          <button class="toggle-btn" id="toggleMonthly" onclick="setPricing('monthly')">Monthly</button>
+          <button class="toggle-btn active" id="toggleYearly" onclick="setPricing('yearly')">Yearly <span class="toggle-save">Save 50%</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card anim">
+        <h3>Free</h3><p class="price-sub">Try the chef</p>
+        <div class="price-amount gradient-text-warm">$0</div><div class="price-period">forever</div>
+        <ul class="price-features">
+          <li>10 chef messages a day</li>
+          <li>Browse the recipe library</li>
+          <li>1 recipe adaptation</li>
+          <li>Pantry tracking</li>
+          <li>Safety disclaimers &amp; allergen flags</li>
+          <li class="off">Unlimited chat</li>
+          <li class="off">Voice cooking</li>
+          <li class="off">Receipt &amp; barcode scanning</li>
+        </ul>
+        <a href="#signup" class="btn-outline">Start Free</a>
+      </div>
+      <div class="price-card featured anim">
+        <div class="price-badge">7-Day Free Trial</div>
+        <h3>Pro</h3><p class="price-sub">For everyday cooks</p>
+        <div class="price-amount gradient-text-warm">$4.99</div><div class="price-period">/mo (billed yearly)</div>
+        <ul class="price-features">
+          <li>Ask Chef anything — no message limit</li>
+          <li>Cook hands-free with premium voices</li>
+          <li>Every recipe rewritten for you</li>
+          <li>Save any URL or cookbook page</li>
+          <li>Receipt &amp; barcode scanning</li>
+          <li>Voice timers in Dynamic Island</li>
+          <li>Personal recipe library</li>
+          <li>7-day free trial · cancel anytime</li>
+        </ul>
+        <a href="#signup" class="btn-warm">Get Pro</a>
+      </div>
+      <div class="price-card anim">
+        <h3>Lifetime</h3><p class="price-sub">Pay once. Yours forever.</p>
+        <div class="price-amount gradient-text-warm">$149.99</div><div class="price-period">one-time</div>
+        <ul class="price-features">
+          <li>Everything in Pro</li>
+          <li>Forever — no renewal</li>
+          <li>All future Pro features included</li>
+          <li>Priority support</li>
+          <li>Early access to new voices</li>
+          <li>Early access to new cuisines</li>
+        </ul>
+        <a href="#signup" class="btn-outline">Buy Lifetime</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Common <span class="gradient-text-warm">questions.</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q">How is Saffra different from a recipe site or ChatGPT?<span class="faq-icon">+</span></button><div class="faq-a"><p>Recipe sites don't know what's in your fridge. ChatGPT doesn't either, and it doesn't remember the last thing you cooked. Saffra is built for cooking specifically — she checks your pantry before suggesting anything, rewrites every recipe for your skill and equipment, and remembers what you've loved (and what you haven't). She also handles allergens with hard rules, not vibes — a declared allergy is non-negotiable.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What does "she helps you make anything" actually mean?<span class="faq-icon">+</span></button><div class="faq-a"><p>Anything. Any cuisine — Thai, Mexican regional, Korean, Vietnamese, French, classic Italian to Sicilian-specific. Any dietary world — vegan, keto, halal, FODMAP, Whole30. Any skill — from someone who's never cooked chicken to a home cook plating sous-vide. Any kitchen — induction-only, no oven, cast iron only, sous vide. She calibrates to you.</p></div></div>
+      <div class="faq-item"><button class="faq-q">How does she know what's in my pantry?<span class="faq-icon">+</span></button><div class="faq-a"><p>You tell her — but quickly. Snap a grocery receipt or scan a barcode and items land in your pantry pre-categorized, with expiration dates and allergen flags. Or just type things in. As you cook, she tracks what's used and what's running low. Items going off get surfaced for tonight's dinner instead of going in the trash.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Do I have to use voice?<span class="faq-icon">+</span></button><div class="faq-a"><p>Never. Text-mode chat is the default and works the same. Voice mode is for when your hands are deep in dough or holding a knife. Toggle it per-session in Settings, or use Cooking Mode for full hands-free narration with the wake phrase "hey chef." Free tier is text-only; Pro unlocks voice.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What about allergies and food safety?<span class="faq-icon">+</span></button><div class="faq-a"><p>Allergens are non-negotiable. Once you declare one in your profile, she will either substitute it (loud and clear, named) or pass on the recipe entirely — never quietly proceed. Adapted recipes carry a persistent allergen disclaimer banner. USDA-safe internal temperatures show up in every recipe that needs them. That said: Saffra is an AI. She's very capable but always verify allergens and cooking temperatures yourself, and she's not a substitute for medical or dietary advice.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Is the free tier actually usable?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Free gives you 10 chef messages a day, full recipe-library browse, one recipe adaptation, pantry tracking, and safety guardrails. Pro adds the things you'd reach for daily — unlimited chat, voice cooking, receipt scanning, and a personal recipe library that learns you.</p></div></div>
+      <div class="faq-item"><button class="faq-q">When is Saffra launching?<span class="faq-icon">+</span></button><div class="faq-a"><p>We're heading into TestFlight beta now. Sign up for early access above and you'll be among the first cooks invited in. iOS first; the rest of the platforms come after.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What about my data?<span class="faq-icon">+</span></button><div class="faq-a"><p>Sign in with Apple. We never track you. We never sell data. Your conversation, pantry, and preferences stay yours. Voice transcription runs on-device by default — only the text reaches our servers, not the audio.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CTA -->
+<section class="cta-section" id="signup">
+  <div class="container">
+    <h2 class="section-title anim">Ready to cook with <span class="gradient-text-warm">Saffra?</span></h2>
+    <p class="section-desc anim" style="margin:16px auto 0;text-align:center">Get notified the moment we open TestFlight. iOS first.</p>
+    <form class="signup-form anim" onsubmit="handleSignup(event)">
+      <input type="email" id="signupEmail" placeholder="Enter your email" required>
+      <button type="submit" class="btn-warm">Get Early Access <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </form>
+    <p class="anim" style="margin-top:12px;font-size:0.75rem;color:rgba(154,142,128,0.55);position:relative;z-index:1">iOS. No spam. We'll notify you the moment beta opens.</p>
+  </div>
+</section>
+
+<!-- Scroll to Top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">
+          <div class="logo-mark" style="width:30px;height:30px;border-radius:8px;"><img src="saffra-hat.png" alt="Saffra" style="width:22px;height:22px"></div>
+          <span>Saffra</span>
+        </a>
+        <p>The AI chef in your pocket. Make anything — any cuisine, any kitchen, any skill.</p>
+      </div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#how-it-works">How It Works</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div class="footer-col"><h4>Connect</h4><ul><li><a href="#" target="_blank" rel="noopener">Twitter / X</a></li><li><a href="#" target="_blank" rel="noopener">Instagram</a></li><li><a href="#" target="_blank" rel="noopener">TikTok</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="#" target="_blank" rel="noopener">Privacy</a></li><li><a href="#" target="_blank" rel="noopener">Terms</a></li><li><a href="mailto:hello@saffra.app">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Saffra. All rights reserved.</p>
+      <p>Saffra is an AI. Always verify allergens and cooking temperatures yourself.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav
+  document.getElementById('navToggle').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-links a').forEach(function(a) {
+    a.addEventListener('click', function() { document.getElementById('navLinks').classList.remove('open'); });
+  });
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = this.parentElement;
+      var open = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+      if (!open) item.classList.add('open');
+    });
+  });
+
+  // Scroll animations
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.anim').forEach(function(el) { observer.observe(el); });
+
+  // Scroll to top button
+  var scrollBtn = document.getElementById('scrollTop');
+  if (scrollBtn) {
+    window.addEventListener('scroll', function() {
+      scrollBtn.classList.toggle('show', window.scrollY > 400);
+    }, { passive: true });
+  }
+
+  // Pricing toggle. Yearly is the default — best-value framing for the
+  // featured Pro card. Lifetime price is fixed regardless of toggle.
+  var monthlyPrices = ['$0', '$9.99', '$149.99'];
+  var yearlyPrices = ['$0', '$4.99', '$149.99'];
+  var monthlyPeriods = ['forever', '/month', 'one-time'];
+  var yearlyPeriods = ['forever', '/mo (billed yearly)', 'one-time'];
+  function setPricing(mode) {
+    var cards = document.querySelectorAll('.price-card');
+    var prices = mode === 'yearly' ? yearlyPrices : monthlyPrices;
+    var periods = mode === 'yearly' ? yearlyPeriods : monthlyPeriods;
+    cards.forEach(function(card, i) {
+      var amt = card.querySelector('.price-amount');
+      var per = card.querySelector('.price-period');
+      if (amt) amt.textContent = prices[i];
+      if (per) per.textContent = periods[i];
+    });
+    document.getElementById('toggleMonthly').classList.toggle('active', mode === 'monthly');
+    document.getElementById('toggleYearly').classList.toggle('active', mode === 'yearly');
+  }
+
+  // Parallax-lite on hero glow
+  var hero = document.querySelector('.hero');
+  if (hero) {
+    window.addEventListener('scroll', function() {
+      var y = window.scrollY;
+      if (y < 800) {
+        hero.style.setProperty('--parallax', (y * 0.15) + 'px');
+      }
+    }, { passive: true });
+  }
+
+  // Signup — client-side only for now. The user can wire up Firebase /
+  // a real backend later. Stores the email in localStorage so a refresh
+  // doesn't lose the commitment, and shows a friendly success state.
+  function handleSignup(e) {
+    e.preventDefault();
+    var email = document.getElementById('signupEmail').value.trim();
+    var btn = e.target.querySelector('button');
+    if (!email) return;
+
+    btn.textContent = 'Saving...';
+    btn.style.opacity = '0.7';
+
+    try {
+      var existing = JSON.parse(localStorage.getItem('saffra_waitlist') || '[]');
+      if (existing.indexOf(email) === -1) {
+        existing.push(email);
+        localStorage.setItem('saffra_waitlist', JSON.stringify(existing));
+      }
+    } catch (err) {
+      // localStorage may be disabled in private mode — fail gracefully.
+    }
+
+    setTimeout(function() {
+      btn.textContent = "You're on the list!";
+      btn.style.background = 'rgba(224,130,48,0.15)';
+      btn.style.color = '#F5C088';
+      btn.style.boxShadow = 'none';
+      btn.style.opacity = '1';
+      document.getElementById('signupEmail').value = '';
+    }, 350);
+
+    setTimeout(function() {
+      btn.innerHTML = 'Get Early Access <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.boxShadow = '';
+    }, 4000);
+  }
+</script>
+
+</body>
+</html>
