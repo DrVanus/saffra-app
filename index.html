@@ -1039,8 +1039,8 @@
         <p>The AI chef in your pocket. Make anything — any cuisine, any kitchen, any skill.</p>
       </div>
       <div class="footer-col"><h4>Product</h4><ul><li><a href="#how-it-works">How It Works</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
-      <div class="footer-col"><h4>Connect</h4><ul><li><a href="#" target="_blank" rel="noopener">Twitter / X</a></li><li><a href="#" target="_blank" rel="noopener">Instagram</a></li><li><a href="#" target="_blank" rel="noopener">TikTok</a></li></ul></div>
-      <div class="footer-col"><h4>Legal</h4><ul><li><a href="#" target="_blank" rel="noopener">Privacy</a></li><li><a href="#" target="_blank" rel="noopener">Terms</a></li><li><a href="mailto:hello@saffra.app">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hello@saffra.app">hello@saffra.app</a></li><li><a href="https://github.com/DrVanus/saffra-app" target="_blank" rel="noopener">GitHub</a></li></ul></div>
     </div>
     <div class="footer-bottom">
       <p>&copy; 2026 Saffra. All rights reserved.</p>
@@ -1049,7 +1049,23 @@
   </div>
 </footer>
 
+<!-- Firebase compat SDKs (used only for the early-access waitlist write).
+     Reuses the existing TheOne Firebase project; signups land in the same
+     `early_access` collection but are tagged source: 'saffra-website' so
+     they can be filtered separately. -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyBKkYiae50y-uZN7gGm97Bu-5iXNv9P5fE",
+    authDomain: "theone-dating-app.firebaseapp.com",
+    projectId: "theone-dating-app",
+    storageBucket: "theone-dating-app.firebasestorage.app",
+    messagingSenderId: "777335450044",
+    appId: "1:777335450044:ios:d8f1673935c1b0251de3b9"
+  });
+  var db = firebase.firestore();
+
   // Mobile nav
   document.getElementById('navToggle').addEventListener('click', function() {
     document.getElementById('navLinks').classList.toggle('open');
@@ -1118,9 +1134,10 @@
     }, { passive: true });
   }
 
-  // Signup — client-side only for now. The user can wire up Firebase /
-  // a real backend later. Stores the email in localStorage so a refresh
-  // doesn't lose the commitment, and shows a friendly success state.
+  // Signup — writes to the shared `early_access` Firestore collection,
+  // tagged with source 'saffra-website' so signups can be separated from
+  // TheOne's waitlist. Falls back to a friendly error if the write fails
+  // (offline, blocked extension, Firestore unreachable).
   function handleSignup(e) {
     e.preventDefault();
     var email = document.getElementById('signupEmail').value.trim();
@@ -1130,24 +1147,24 @@
     btn.textContent = 'Saving...';
     btn.style.opacity = '0.7';
 
-    try {
-      var existing = JSON.parse(localStorage.getItem('saffra_waitlist') || '[]');
-      if (existing.indexOf(email) === -1) {
-        existing.push(email);
-        localStorage.setItem('saffra_waitlist', JSON.stringify(existing));
-      }
-    } catch (err) {
-      // localStorage may be disabled in private mode — fail gracefully.
-    }
-
-    setTimeout(function() {
+    db.collection('early_access').add({
+      email: email,
+      source: 'saffra-website',
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent
+    }).then(function() {
       btn.textContent = "You're on the list!";
       btn.style.background = 'rgba(224,130,48,0.15)';
       btn.style.color = '#F5C088';
       btn.style.boxShadow = 'none';
       btn.style.opacity = '1';
       document.getElementById('signupEmail').value = '';
-    }, 350);
+    }).catch(function(err) {
+      console.error('Signup error:', err);
+      btn.textContent = 'Error — try again';
+      btn.style.background = '';
+      btn.style.opacity = '1';
+    });
 
     setTimeout(function() {
       btn.innerHTML = 'Get Early Access <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
