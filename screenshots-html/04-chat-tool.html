@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Chef chat — tool call</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 540px; height: 1100px;
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px;
+  }
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(224,130,48,0.20), transparent 60%);
+    filter: blur(44px);
+  }
+  .phone {
+    position: relative;
+    width: 510px; height: 1070px;
+    border-radius: 76px;
+    background: #000;
+    padding: 13px;
+    box-shadow:
+      0 30px 70px rgba(0,0,0,0.5),
+      0 0 60px rgba(224,130,48,0.22),
+      inset 0 0 0 2px rgba(245,192,136,0.18);
+    border: 2px solid rgba(80,60,40,0.55);
+  }
+  .screen {
+    width: 100%; height: 100%;
+    border-radius: 65px; overflow: hidden;
+    background: linear-gradient(180deg, #1A1612, #0E0C0A);
+    position: relative;
+    padding: 78px 24px 28px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .screen::before {
+    content: ''; position: absolute;
+    top: 18px; left: 50%; transform: translateX(-50%);
+    width: 156px; height: 38px;
+    background: #000; border-radius: 28px; z-index: 10;
+  }
+  /* Header */
+  .header {
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(245,192,136,0.20), rgba(184,101,28,0.06));
+    border: 1px solid rgba(224,130,48,0.30);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .avatar img { width: 36px; height: 36px; object-fit: contain; }
+  .header-info { flex: 1; }
+  .header-name { font-size: 16px; font-weight: 800; color: #F5EFE5; }
+  .header-status { font-size: 12px; color: #5BA15F; font-weight: 600; margin-top: 1px; display: flex; align-items: center; gap: 5px; }
+  .header-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #5BA15F; box-shadow: 0 0 6px rgba(91,161,95,0.7); }
+  /* Messages */
+  .msgs { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+  .bubble {
+    max-width: 80%;
+    padding: 13px 16px; border-radius: 18px;
+    font-size: 15px; line-height: 1.5;
+  }
+  .bubble.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #F5C088, #E08230 60%, #B8651C);
+    color: #fff; font-weight: 500;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 4px 14px rgba(224,130,48,0.30);
+  }
+  .bubble.chef {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.04);
+    color: #F5EFE5; font-weight: 400;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom-left-radius: 6px;
+  }
+  .bubble.chef strong { color: #F5C088; font-weight: 700; }
+  /* Tool chip */
+  .tool-card {
+    align-self: flex-start;
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 13px; border-radius: 12px;
+    background: rgba(91,161,95,0.10);
+    border: 1px solid rgba(91,161,95,0.24);
+  }
+  .tool-card .ic {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, rgba(91,161,95,0.30), rgba(91,161,95,0.10));
+    border: 1px solid rgba(91,161,95,0.30);
+    display: flex; align-items: center; justify-content: center;
+    color: #8FCB93; font-size: 13px;
+  }
+  .tool-card .lbl { font-size: 13px; font-weight: 700; color: #C9C0B2; }
+  .tool-card .sub { font-size: 11px; color: #6B5F50; margin-top: 1px; }
+  .tool-card .check { color: #8FCB93; font-size: 14px; margin-left: auto; }
+
+  /* Recipe suggestion card */
+  .recipe-card {
+    align-self: flex-start;
+    width: 95%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid rgba(224,130,48,0.30);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: 0 8px 24px rgba(224,130,48,0.10);
+  }
+  .recipe-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .recipe-thumb {
+    width: 60px; height: 60px; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(245,192,136,0.30), rgba(184,101,28,0.10));
+    border: 1px solid rgba(224,130,48,0.32);
+    display: flex; align-items: center; justify-content: center;
+    color: #F5C088; font-size: 22px;
+  }
+  .recipe-meta { flex: 1; }
+  .recipe-tag-row { display: flex; gap: 6px; margin-bottom: 4px; }
+  .recipe-tag {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.04em;
+    padding: 3px 7px; border-radius: 6px;
+    background: rgba(224,130,48,0.18); color: #F5C088;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .recipe-tag.time { background: rgba(255,255,255,0.05); color: #C9C0B2; }
+  .recipe-name { font-size: 14px; font-weight: 800; color: #F5EFE5; line-height: 1.25; }
+  .recipe-cuisine { font-size: 11px; color: #9A8E80; margin-top: 2px; }
+  .recipe-actions { display: flex; gap: 8px; }
+  .ra-btn {
+    flex: 1; text-align: center; font-size: 12px; font-weight: 800;
+    padding: 9px; border-radius: 10px;
+  }
+  .ra-btn.primary { background: linear-gradient(135deg, #E08230, #B8651C); color: #fff; }
+  .ra-btn.secondary { background: rgba(224,130,48,0.10); border: 1px solid rgba(224,130,48,0.24); color: #F5C088; }
+
+  /* Input bar */
+  .input-bar {
+    background: rgba(20,16,12,0.85);
+    border: 1px solid rgba(224,130,48,0.18);
+    border-radius: 22px;
+    padding: 13px 16px;
+    display: flex; align-items: center; gap: 10px;
+    backdrop-filter: blur(16px);
+    margin-top: auto;
+  }
+  .input-bar .sparkles { color: #E08230; font-size: 16px; }
+  .input-bar .placeholder { color: #6B5F50; font-size: 14px; flex: 1; }
+  .input-bar .send {
+    width: 28px; height: 28px; border-radius: 10px;
+    background: linear-gradient(135deg, #E08230, #B8651C); opacity: 0.5;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 12px; font-weight: 800;
+  }
+</style></head>
+<body>
+  <div class="phone"><div class="screen">
+    <div class="header">
+      <div class="avatar"><img src="../saffra-hat.png" alt=""></div>
+      <div class="header-info">
+        <div class="header-name">Saffra</div>
+        <div class="header-status">Active now</div>
+      </div>
+    </div>
+    <div class="msgs">
+      <div class="bubble user">What can I make tonight? I have maybe 30 minutes.</div>
+
+      <div class="tool-card">
+        <div class="ic">🌿</div>
+        <div>
+          <div class="lbl">Checking your pantry</div>
+          <div class="sub">12 items · 2 expiring soon</div>
+        </div>
+        <div class="check">✓</div>
+      </div>
+
+      <div class="bubble chef">Quick one: <strong>let's do my skillet chicken thigh</strong> in a cilantro-tomato pan sauce over basmati. Thirty minutes flat, one pan.</div>
+
+      <div class="bubble chef">The cilantro's going yellow — perfect time to use it tonight.</div>
+
+      <div class="recipe-card">
+        <div class="recipe-head">
+          <div class="recipe-thumb">🍗</div>
+          <div class="recipe-meta">
+            <div class="recipe-tag-row">
+              <div class="recipe-tag">CHEF PICK</div>
+              <div class="recipe-tag time">⏱ 30 min</div>
+            </div>
+            <div class="recipe-name">Skillet Chicken Thighs in Cilantro-Tomato Pan Sauce</div>
+            <div class="recipe-cuisine">Mexican-leaning · Pantry-led</div>
+          </div>
+        </div>
+        <div class="recipe-actions">
+          <div class="ra-btn primary">📖 See recipe</div>
+          <div class="ra-btn secondary">🎙 Walk me through it</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <span class="sparkles">✨</span>
+      <span class="placeholder">Answer…</span>
+      <span class="send">→</span>
+    </div>
+  </div></div>
+</body></html>

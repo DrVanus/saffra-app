@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Pantry</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 540px; height: 1100px;
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px;
+  }
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(91,161,95,0.18), transparent 60%);
+    filter: blur(44px);
+  }
+  .phone {
+    position: relative;
+    width: 510px; height: 1070px;
+    border-radius: 76px;
+    background: #000;
+    padding: 13px;
+    box-shadow:
+      0 30px 70px rgba(0,0,0,0.5),
+      0 0 60px rgba(91,161,95,0.18),
+      inset 0 0 0 2px rgba(245,192,136,0.18);
+    border: 2px solid rgba(80,60,40,0.55);
+  }
+  .screen {
+    width: 100%; height: 100%;
+    border-radius: 65px; overflow: hidden;
+    background: linear-gradient(180deg, #1A1612, #0E0C0A);
+    position: relative;
+    padding: 78px 28px 28px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .screen::before {
+    content: ''; position: absolute;
+    top: 18px; left: 50%; transform: translateX(-50%);
+    width: 156px; height: 38px;
+    background: #000; border-radius: 28px; z-index: 10;
+  }
+  /* Sub-tab segmented */
+  .seg {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px; padding: 4px;
+    display: flex; gap: 4px;
+  }
+  .seg-btn { flex: 1; padding: 9px; text-align: center; border-radius: 9px; font-size: 13px; font-weight: 700; color: #9A8E80; }
+  .seg-btn.active { background: rgba(224,130,48,0.20); color: #F5C088; }
+
+  /* Hero card */
+  .hero {
+    background: linear-gradient(180deg, rgba(91,161,95,0.10), rgba(255,255,255,0.02));
+    border: 1px solid rgba(91,161,95,0.20);
+    border-radius: 18px;
+    padding: 18px 18px;
+  }
+  .hero-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.18em; color: #5BA15F; text-transform: uppercase; margin-bottom: 6px; }
+  .hero-title { font-size: 21px; font-weight: 800; color: #F5EFE5; letter-spacing: -0.01em; }
+  .hero-sub { font-size: 13px; color: #9A8E80; margin-top: 4px; line-height: 1.4; }
+
+  .search-bar {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 13px 16px;
+    display: flex; align-items: center; gap: 10px;
+    color: #6B5F50; font-size: 14px;
+  }
+  .search-bar .ic { color: #9A8E80; }
+
+  .section-title {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 6px;
+  }
+  .section-title h3 { font-size: 14px; font-weight: 800; letter-spacing: 0.10em; color: #C9C0B2; text-transform: uppercase; }
+  .section-title .count { font-size: 12px; color: #6B5F50; font-weight: 600; }
+
+  .item-row {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 13px 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .item-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(91,161,95,0.14); border: 1px solid rgba(91,161,95,0.24);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .item-icon.warm { background: rgba(224,130,48,0.14); border-color: rgba(224,130,48,0.26); }
+  .item-name { font-size: 16px; font-weight: 600; color: #F5EFE5; }
+  .item-qty { font-size: 12px; color: #9A8E80; margin-top: 1px; }
+  .item-row .grow { flex: 1; }
+  .badge {
+    font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 8px;
+    letter-spacing: 0.06em;
+  }
+  .badge.expiring { background: rgba(224,130,48,0.20); color: #F5C088; }
+  .badge.fresh { background: rgba(91,161,95,0.18); color: #8FCB93; }
+
+  .add-btn {
+    position: absolute; bottom: 28px; right: 28px;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #E08230, #B8651C);
+    color: #fff; font-size: 26px; font-weight: 300;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 22px rgba(224,130,48,0.45);
+  }
+</style></head>
+<body>
+  <div class="phone"><div class="screen">
+    <div class="seg">
+      <div class="seg-btn active">Pantry</div>
+      <div class="seg-btn">Grocery</div>
+    </div>
+    <div class="hero">
+      <div class="hero-eyebrow">Your Kitchen</div>
+      <div class="hero-title">12 ingredients across 4 zones</div>
+      <div class="hero-sub">Two are best used soon — let's cook around them tonight.</div>
+    </div>
+    <div class="search-bar">
+      <span class="ic">🔍</span>
+      <span>Search your pantry</span>
+    </div>
+
+    <div class="section-title">
+      <h3>Best Used Soon</h3>
+      <span class="count">2</span>
+    </div>
+    <div class="item-row">
+      <div class="item-icon warm">🌿</div>
+      <div>
+        <div class="item-name">Cilantro</div>
+        <div class="item-qty">1 bunch · in the crisper</div>
+      </div>
+      <div class="grow"></div>
+      <div class="badge expiring">2 DAYS</div>
+    </div>
+    <div class="item-row">
+      <div class="item-icon warm">🥑</div>
+      <div>
+        <div class="item-name">Avocados</div>
+        <div class="item-qty">2 · ripe</div>
+      </div>
+      <div class="grow"></div>
+      <div class="badge expiring">3 DAYS</div>
+    </div>
+
+    <div class="section-title">
+      <h3>Proteins</h3>
+      <span class="count">3</span>
+    </div>
+    <div class="item-row">
+      <div class="item-icon">🍗</div>
+      <div>
+        <div class="item-name">Chicken thighs</div>
+        <div class="item-qty">1.5 lb · boneless skinless</div>
+      </div>
+      <div class="grow"></div>
+      <div class="badge fresh">FRESH</div>
+    </div>
+    <div class="item-row">
+      <div class="item-icon">🥚</div>
+      <div>
+        <div class="item-name">Eggs</div>
+        <div class="item-qty">8 · large</div>
+      </div>
+      <div class="grow"></div>
+      <div class="badge fresh">FRESH</div>
+    </div>
+
+    <div class="add-btn">+</div>
+  </div></div>
+</body></html>

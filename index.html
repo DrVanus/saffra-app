@@ -529,6 +529,47 @@
       background: var(--secondary);
     }
 
+    /* "Take a look inside" gallery — real screenshots of the app's main surfaces */
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
+      margin-top: 48px;
+      align-items: end;
+    }
+    .gallery-card { text-align: center; }
+    .gallery-card .shot-wrap {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+    .gallery-card .shot-wrap::before {
+      content: ''; position: absolute; inset: -16px;
+      border-radius: 2.5rem;
+      background: radial-gradient(ellipse, rgba(224,130,48,0.18), transparent 65%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    .gallery-card .shot {
+      position: relative;
+      width: 100%; height: auto; aspect-ratio: 540 / 1100;
+      object-fit: contain;
+      transition: transform 0.4s ease;
+    }
+    .gallery-card:hover .shot { transform: translateY(-4px) scale(1.02); }
+    .gallery-card h4 {
+      font-size: 1rem; font-weight: 700;
+      color: #F5EFE5; margin-bottom: 6px; letter-spacing: -0.01em;
+    }
+    .gallery-card p {
+      font-size: 0.85rem; color: var(--muted-fg);
+      line-height: 1.5; max-width: 220px; margin: 0 auto;
+    }
+    @media (max-width: 1099px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    }
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; max-width: 360px; margin-left: auto; margin-right: auto; gap: 36px; }
+    }
+
     /* Intelligence section — the "why she's actually a chef" credibility layer */
     .intelligence-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 48px;
@@ -773,9 +814,9 @@
       <span>Saffra</span>
     </a>
     <div class="nav-links" id="navLinks">
+      <a href="#screenshots">Inside</a>
       <a href="#intelligence">The AI</a>
       <a href="#features">Features</a>
-      <a href="#how-it-works">How It Works</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="#signup" class="nav-cta">Get Early Access</a>
@@ -898,6 +939,49 @@
         <div class="chat-tool">Checking your pantry · 9 items</div>
         <div class="chat-bubble chat-chef">Quick one: let's do a skillet chicken thigh in a cilantro-tomato pan sauce over rice. Thirty minutes flat, one pan.</div>
         <div class="chat-bubble chat-chef" style="margin-bottom:0">The cilantro's going yellow — perfect time to use it. Want me to walk you through it hands-free?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Take a look inside — visual gallery of the app's main surfaces -->
+<section id="screenshots">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">Inside the App</span>
+      <h2 class="section-title">Take a look <span class="gradient-text-warm">inside.</span></h2>
+      <p class="section-desc" style="margin:14px auto 0">Four screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-card anim anim-d1">
+        <div class="shot-wrap">
+          <img class="shot" src="screenshots/01-chef-tab.png" alt="Chef tab — time-of-day greeting and contextual quick-start prompts">
+        </div>
+        <h4>Chef tab</h4>
+        <p>Time-of-day greeting, live pantry pills, four contextual quick-starts.</p>
+      </div>
+      <div class="gallery-card anim anim-d2">
+        <div class="shot-wrap">
+          <img class="shot" src="screenshots/04-chat-tool.png" alt="Chef chat with a real tool call — Saffra checks your pantry before recommending">
+        </div>
+        <h4>Chat &amp; tool calls</h4>
+        <p>Watch her check your pantry first, then suggest a real recipe with a tap to cook.</p>
+      </div>
+      <div class="gallery-card anim anim-d3">
+        <div class="shot-wrap">
+          <img class="shot" src="screenshots/02-cooking-mode.png" alt="Cooking Mode with Live Activity timer in the Dynamic Island and the hey chef wake phrase pill">
+        </div>
+        <h4>Cooking Mode</h4>
+        <p>Hands-free narration. Voice timers in the Dynamic Island. "Hey chef, next step."</p>
+      </div>
+      <div class="gallery-card anim anim-d4">
+        <div class="shot-wrap">
+          <img class="shot" src="screenshots/03-pantry.png" alt="Pantry view with categories, expiring items badged for use-it-up suggestions">
+        </div>
+        <h4>Pantry</h4>
+        <p>Track what you have. Items going off get flagged for tonight's dinner.</p>
       </div>
     </div>
   </div>
@@ -1168,7 +1252,7 @@
         </a>
         <p>The AI chef in your pocket. Make anything — any cuisine, any kitchen, any skill.</p>
       </div>
-      <div class="footer-col"><h4>Product</h4><ul><li><a href="#intelligence">The AI</a></li><li><a href="#features">Features</a></li><li><a href="#how-it-works">How It Works</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#screenshots">Inside the App</a></li><li><a href="#intelligence">The AI</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
       <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hello@saffra.app">hello@saffra.app</a></li><li><a href="https://github.com/DrVanus/saffra-app" target="_blank" rel="noopener">GitHub</a></li></ul></div>
     </div>

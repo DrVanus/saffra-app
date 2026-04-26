@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Cooking Mode</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 540px; height: 1100px;
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px;
+  }
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(224,130,48,0.22), transparent 60%);
+    filter: blur(44px);
+  }
+  .phone {
+    position: relative;
+    width: 510px; height: 1070px;
+    border-radius: 76px;
+    background: #000;
+    padding: 13px;
+    box-shadow:
+      0 30px 70px rgba(0,0,0,0.5),
+      0 0 70px rgba(224,130,48,0.26),
+      inset 0 0 0 2px rgba(245,192,136,0.18);
+    border: 2px solid rgba(80,60,40,0.55);
+  }
+  .screen {
+    width: 100%; height: 100%;
+    border-radius: 65px; overflow: hidden;
+    background: linear-gradient(180deg, #1A1612, #0E0C0A);
+    position: relative;
+    padding: 80px 26px 28px;
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+  }
+  /* Live Activity bubble in Dynamic Island */
+  .island {
+    position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+    background: #000; border-radius: 28px; z-index: 11;
+    height: 40px; padding: 0 18px;
+    display: flex; align-items: center; gap: 10px;
+    width: 280px;
+  }
+  .island .ic {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: linear-gradient(135deg, #E08230, #B8651C);
+    color: #fff; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .island .text { font-size: 14px; color: #F5EFE5; font-weight: 700; flex: 1; }
+  .island .timer { font-size: 14px; color: #F5C088; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  /* Header */
+  .header {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    margin-top: 30px;
+  }
+  .close-btn {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    display: flex; align-items: center; justify-content: center;
+    color: #9A8E80; font-size: 14px; font-weight: 800;
+  }
+  .recipe-title {
+    flex: 1; padding: 0 14px;
+  }
+  .recipe-name { font-size: 17px; font-weight: 700; color: #F5EFE5; line-height: 1.2; }
+  .recipe-mode { font-size: 12px; font-weight: 600; color: #E08230; margin-top: 2px; letter-spacing: 0.04em; }
+  .voice-btn {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: rgba(224,130,48,0.18);
+    border: 1px solid rgba(224,130,48,0.32);
+    display: flex; align-items: center; justify-content: center;
+    color: #F5C088; font-size: 16px;
+    position: relative;
+  }
+  .voice-btn::after {
+    content: ''; position: absolute; top: -2px; right: -2px;
+    width: 10px; height: 10px; border-radius: 50%; background: #FF453A;
+    box-shadow: 0 0 8px rgba(255,69,58,0.7);
+  }
+  /* Progress */
+  .progress-row {
+    width: 100%; margin-top: 8px;
+  }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 13px; color: #9A8E80; font-weight: 700; margin-bottom: 7px; }
+  .progress-meta .pct { color: #F5C088; }
+  .progress-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .progress-fill { width: 50%; height: 100%; background: linear-gradient(90deg, #F5C088, #E08230, #B8651C); border-radius: 3px; }
+
+  /* Wake-phrase pill */
+  .wake-pill {
+    margin-top: 4px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 20px;
+    background: rgba(20,16,12,0.6); backdrop-filter: blur(8px);
+    border: 1px solid rgba(224,130,48,0.32);
+    font-size: 12px; color: #F5EFE5; font-weight: 600;
+  }
+  .wake-pill .wf { color: #F5C088; font-size: 13px; }
+
+  /* Step card */
+  .step-card {
+    width: 100%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid rgba(224,130,48,0.18);
+    border-radius: 22px;
+    padding: 22px 22px;
+    backdrop-filter: blur(12px);
+    margin-top: 10px;
+  }
+  .step-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .step-num {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #F5C088, #E08230);
+    color: #fff; font-weight: 800; font-size: 26px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 18px rgba(224,130,48,0.50);
+  }
+  .step-meta {
+    display: flex; flex-direction: column;
+  }
+  .step-eyebrow { font-size: 12px; font-weight: 800; color: #E08230; letter-spacing: 0.04em; }
+  .step-status { font-size: 14px; color: #9A8E80; font-weight: 600; margin-top: 2px; }
+  .step-text {
+    font-size: 19px; color: #F5EFE5; line-height: 1.5; font-weight: 500;
+  }
+  .timer-row {
+    display: flex; align-items: center; gap: 10px; justify-content: space-between;
+    padding: 12px 14px; border-radius: 12px;
+    background: rgba(224,130,48,0.10); border: 1px solid rgba(224,130,48,0.24);
+    margin-top: 16px;
+  }
+  .timer-label { font-size: 14px; color: #F5C088; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .timer-start {
+    background: #E08230; color: #fff; font-weight: 800; font-size: 13px;
+    padding: 7px 16px; border-radius: 100px;
+  }
+
+  /* Bottom controls */
+  .controls {
+    margin-top: auto; display: flex; gap: 10px; width: 100%;
+  }
+  .ctrl-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: rgba(224,130,48,0.14); border: 1px solid rgba(224,130,48,0.30);
+    color: #F5C088; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .next-btn {
+    flex: 1; height: 56px; border-radius: 16px;
+    background: linear-gradient(180deg, #F5C088, #E08230 60%, #B8651C);
+    color: #fff; font-weight: 800; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 6px 20px rgba(224,130,48,0.40);
+  }
+</style></head>
+<body>
+  <div class="phone"><div class="screen">
+    <div class="island">
+      <div class="ic">⏱</div>
+      <div class="text">Step 3 timer</div>
+      <div class="timer">5:42</div>
+    </div>
+    <div class="header">
+      <div class="close-btn">✕</div>
+      <div class="recipe-title">
+        <div class="recipe-name">Skillet Chicken Thighs<br>in Cilantro-Tomato Sauce</div>
+        <div class="recipe-mode">COOKING MODE</div>
+      </div>
+      <div class="voice-btn">🎙</div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-meta"><span>Step 3 of 6</span><span class="pct">50%</span></div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+    <div class="wake-pill">
+      <span class="wf">▸</span>
+      Try saying "hey chef, next step"
+    </div>
+    <div class="step-card">
+      <div class="step-head">
+        <div class="step-num">3</div>
+        <div class="step-meta">
+          <div class="step-eyebrow">STEP 3</div>
+          <div class="step-status">Say "next" or tap below</div>
+        </div>
+      </div>
+      <div class="step-text">Sear the thighs skin-down in a cold pan. Six minutes until the skin's deep gold and releases on its own.</div>
+      <div class="timer-row">
+        <div class="timer-label">⏱ Suggested timer: 6 min</div>
+        <div class="timer-start">▶ Start</div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="ctrl-icon">‹</div>
+      <div class="ctrl-icon">⟲</div>
+      <div class="next-btn">Next ›</div>
+    </div>
+  </div></div>
+</body></html>
