@@ -441,18 +441,18 @@
       animation: breathe 1.6s ease-in-out infinite;
     }
 
-    @keyframes crossfade {
-      0%, 42% { opacity: 1; }
-      50%, 92% { opacity: 0; }
-      100% { opacity: 1; }
+    /* Hero rotator — stacked screenshots cross-fading on a timer (JS-driven,
+       see #heroRotator below). The first image is position:relative so it
+       defines the box height; the rest overlay it absolutely and fade in when
+       they receive .is-active. */
+    .hero-phone-frame .hero-phone-img {
+      position: absolute; top: 0; left: 0; width: 100%; height: auto;
+      opacity: 0; transition: opacity 0.9s ease-in-out;
     }
-    .hero-phone-img.phone-back {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      object-fit: contain;
-    }
-    .hero-phone-img.phone-front {
-      position: relative; z-index: 1;
-      animation: crossfade 10s ease-in-out infinite;
+    .hero-phone-frame .hero-phone-img:first-child { position: relative; }
+    .hero-phone-frame .hero-phone-img.is-active { opacity: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-phone-frame .hero-phone-img { transition: none; }
     }
 
     /* Stats */
@@ -534,7 +534,7 @@
 
     /* "Take a look inside" gallery — real screenshots of the app's main surfaces */
     .gallery-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;
       margin-top: 48px;
       align-items: end;
     }
@@ -845,15 +845,24 @@
       </div>
       <div class="hero-screenshot">
         <div class="hero-phone-wrap">
-          <div class="hero-phone-frame">
-            <!-- Back layer: Cooking Mode (revealed during crossfade) -->
-            <img class="hero-phone-img phone-back"
-                 src="screenshots/02-cooking-mode.png"
-                 alt="Saffra Cooking Mode — hands-free voice with Live Activity timer">
-            <!-- Front layer: Chef tab (default visible state) -->
-            <img class="hero-phone-img phone-front"
+          <!-- Hero rotator: cross-fades through the app's signature surfaces.
+               Order tells the story — greet, ask, browse, search, cook. -->
+          <div class="hero-phone-frame" id="heroRotator">
+            <img class="hero-phone-img is-active"
                  src="screenshots/01-chef-tab.png"
                  alt="Saffra Chef tab — pantry-aware quick-start prompts">
+            <img class="hero-phone-img"
+                 src="screenshots/07-chat-recipe.png"
+                 alt="Ask Saffra — she answers with a recipe pulled from the catalog">
+            <img class="hero-phone-img"
+                 src="screenshots/05-recipes.png"
+                 alt="Recipes — a panel-vetted catalog with Saffra's daily pick">
+            <img class="hero-phone-img"
+                 src="screenshots/06-search.png"
+                 alt="Search — semantic recipe search across the whole catalog">
+            <img class="hero-phone-img"
+                 src="screenshots/02-cooking-mode.png"
+                 alt="Cooking Mode — hands-free voice with a Live Activity timer">
           </div>
         </div>
       </div>
@@ -921,7 +930,7 @@
     <div style="text-align:center" class="anim">
       <span class="section-label">Inside the App</span>
       <h2 class="section-title">Take a look <span class="gradient-text-warm">inside.</span></h2>
-      <p class="section-desc" style="margin:14px auto 0">Four screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded.</p>
+      <p class="section-desc" style="margin:14px auto 0">Five screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded.</p>
     </div>
     <div class="gallery-grid">
       <div class="gallery-card anim anim-d1">
@@ -933,19 +942,26 @@
       </div>
       <div class="gallery-card anim anim-d2">
         <div class="shot-wrap">
+          <img class="shot" src="screenshots/07-chat-recipe.png" alt="Ask Saffra — she checks your pantry, then answers with a real recipe from the catalog you can open or cook">
+        </div>
+        <h4>Ask Saffra</h4>
+        <p>She checks your pantry, then answers with a real recipe from the catalog — tap to open it or start cooking.</p>
+      </div>
+      <div class="gallery-card anim anim-d3">
+        <div class="shot-wrap">
           <img class="shot" src="screenshots/04-chat-tool.png" alt="Recipe detail — pantry-aware ingredients, at-a-glance timing, and one tap into Cooking Mode">
         </div>
         <h4>Every recipe adapts</h4>
         <p>Pantry-aware ingredients, at-a-glance timing, diet tags — then one tap into hands-free Cooking Mode.</p>
       </div>
-      <div class="gallery-card anim anim-d3">
+      <div class="gallery-card anim anim-d4">
         <div class="shot-wrap">
           <img class="shot" src="screenshots/02-cooking-mode.png" alt="Cooking Mode with Live Activity timer in the Dynamic Island and the hey saffra wake phrase pill">
         </div>
         <h4>Cooking Mode</h4>
         <p>Hands-free narration. Voice timers in the Dynamic Island. "Hey saffra, next step."</p>
       </div>
-      <div class="gallery-card anim anim-d4">
+      <div class="gallery-card anim anim-d5">
         <div class="shot-wrap">
           <img class="shot" src="screenshots/03-pantry.png" alt="Pantry view with categories, expiring items badged for use-it-up suggestions">
         </div>
@@ -1279,6 +1295,21 @@
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.anim').forEach(function(el) { observer.observe(el); });
+
+  // Hero phone rotator — cross-fade through the signature screens on a timer.
+  (function() {
+    var rot = document.getElementById('heroRotator');
+    if (!rot) return;
+    var shots = rot.querySelectorAll('.hero-phone-img');
+    if (shots.length < 2) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var i = 0;
+    setInterval(function() {
+      shots[i].classList.remove('is-active');
+      i = (i + 1) % shots.length;
+      shots[i].classList.add('is-active');
+    }, 3200);
+  })();
 
   // Scroll to top button
   var scrollBtn = document.getElementById('scrollTop');
