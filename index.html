@@ -349,12 +349,15 @@
       max-width: 280px;
       margin: 0 auto;
     }
-    /* Real device PNGs (540×1100, bezel + Dynamic Island baked in). */
+    /* Real device PNGs (540×1100, bezel + Dynamic Island baked in).
+       Match the gallery .shot treatment exactly so every screenshot renders
+       the same way: no extra border-radius (the bezel is already in the PNG,
+       so a CSS radius would shave its corners) and object-fit: contain. */
     .hero-phone-img {
       display: block;
       width: 280px;
       height: auto;
-      border-radius: 2.5rem;
+      object-fit: contain;
     }
     /* Phone screens */
     .phone-placeholder {
