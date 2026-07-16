@@ -56,12 +56,14 @@ a:hover { color: var(--primary); }
 main { padding: 64px 0 96px; }
 
 h1 {
-  font-size: 2.5rem; font-weight: 800; line-height: 1.15;
+  font-size: 2.5rem; font-weight: 800; line-height: 1.2;
   letter-spacing: -0.03em; margin-bottom: 8px;
   background: linear-gradient(135deg, #F5C088 0%, #E08230 50%, #B8651C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-bottom: 0.1em;
+  margin-bottom: calc(8px - 0.1em);
 }
 
 .last-updated {
