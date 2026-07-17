@@ -947,10 +947,12 @@
     <div style="text-align:center" class="anim">
       <span class="section-label">Inside the App</span>
       <h2 class="section-title">Take a look <span class="gradient-text-warm">inside.</span></h2>
-      <p class="section-desc" style="margin:14px auto 0">Seven screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded. And she's dressed for any hour: every surface ships in light and dark.</p>
+      <p class="section-desc" style="margin:14px auto 0">Seven screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded. And she's dressed for any hour: every surface ships in <strong>light and dark</strong> — flip the whole set below.</p>
       <div class="pricing-toggle-wrap">
         <div class="pricing-toggle" role="group" aria-label="Screenshot appearance">
-          <button class="toggle-btn active" id="modeLight" onclick="setShotMode('light')">
+          <button class="toggle-btn active" id="modeBoth" onclick="setShotMode('both')">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>Both</button>
+          <button class="toggle-btn" id="modeLight" onclick="setShotMode('light')">
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>Light</button>
           <button class="toggle-btn" id="modeDark" onclick="setShotMode('dark')">
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Dark</button>
@@ -960,7 +962,7 @@
     <div class="gallery-grid">
       <div class="gallery-card anim anim-d1">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/01-chef-tab-light.png"
+          <img class="shot" src="screenshots/01-chef-tab-light.png" data-both="light"
                data-light="screenshots/01-chef-tab-light.png" data-dark="screenshots/01-chef-tab-dark.png"
                alt="Chef tab — time-of-day greeting, live pantry pills, and contextual quick-start prompts">
         </div>
@@ -969,7 +971,7 @@
       </div>
       <div class="gallery-card anim anim-d2">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/07-chat-recipe-light.png"
+          <img class="shot" src="screenshots/07-chat-recipe-dark.png" data-both="dark"
                data-light="screenshots/07-chat-recipe-light.png" data-dark="screenshots/07-chat-recipe-dark.png"
                alt="Ask Saffra — she checks your pantry with visible tool calls, then answers with a real recipe card from the catalog">
         </div>
@@ -978,7 +980,7 @@
       </div>
       <div class="gallery-card anim anim-d3">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/04-recipe-detail-light.png"
+          <img class="shot" src="screenshots/04-recipe-detail-light.png" data-both="light"
                data-light="screenshots/04-recipe-detail-light.png" data-dark="screenshots/04-recipe-detail-dark.png"
                alt="Recipe detail — at-a-glance timing, difficulty and servings, pantry-aware ingredients, one tap into Cooking Mode">
         </div>
@@ -987,7 +989,7 @@
       </div>
       <div class="gallery-card anim anim-d4">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/02-cooking-mode-light.png"
+          <img class="shot" src="screenshots/02-cooking-mode-dark.png" data-both="dark"
                data-light="screenshots/02-cooking-mode-light.png" data-dark="screenshots/02-cooking-mode-dark.png"
                alt="Cooking Mode — step-by-step cards Saffra reads aloud, with a suggested timer and an ask-saffra bar">
         </div>
@@ -996,7 +998,7 @@
       </div>
       <div class="gallery-card anim anim-d5">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/03-pantry-light.png"
+          <img class="shot" src="screenshots/03-pantry-light.png" data-both="light"
                data-light="screenshots/03-pantry-light.png" data-dark="screenshots/03-pantry-dark.png"
                alt="Your kitchen — pantry counts, expiring and stale flags, and add-by-photo, receipt, barcode, or hand">
         </div>
@@ -1005,7 +1007,7 @@
       </div>
       <div class="gallery-card anim anim-d6">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/05-recipes-light.png"
+          <img class="shot" src="screenshots/05-recipes-dark.png" data-both="dark"
                data-light="screenshots/05-recipes-light.png" data-dark="screenshots/05-recipes-dark.png"
                alt="Recipes tab — Saffra's meal pick of the moment above quick rails from the panel-vetted catalog">
         </div>
@@ -1014,7 +1016,7 @@
       </div>
       <div class="gallery-card anim anim-d7">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/06-search-light.png"
+          <img class="shot" src="screenshots/06-search-light.png" data-both="light"
                data-light="screenshots/06-search-light.png" data-dark="screenshots/06-search-dark.png"
                alt="Search — semantic recipe search with cuisine, time, and diet refinements">
         </div>
@@ -1197,7 +1199,7 @@
         <div class="price-amount gradient-text-warm">$4.99</div><div class="price-period">/mo (billed yearly)</div>
         <ul class="price-features">
           <li>Ask Chef anything — no message limit</li>
-          <li>Cook hands-free with Saffra's Nova voice</li>
+          <li>Cook hands-free with Saffra's signature voice</li>
           <li>Every recipe rewritten for you</li>
           <li>Save any URL or cookbook page</li>
           <li>Receipt &amp; barcode scanning</li>
@@ -1250,7 +1252,7 @@
 
       <div class="faq-item"><button class="faq-q">What about allergies and food safety?<span class="faq-icon">+</span></button><div class="faq-a"><p>Allergens are <strong>non-negotiable</strong>. Once you declare one in your profile, she will either substitute the offending ingredient (loud and clear, named in the response) or refuse the recipe entirely and offer a genuinely good alternative — never quietly proceed. For serious allergies (peanut, tree nut, shellfish, sesame, gluten-for-celiac) she also flags cross-contamination risks in shared oils, fryers, cutting boards. Adapted recipes carry a persistent allergen disclaimer banner in-app. USDA-safe internal temperatures appear in every recipe that needs them — chicken at 165°F, ground beef 160°F, salmon 125-130°F. That said: Saffra is an AI. She's very capable but always verify allergens and cooking temperatures yourself, and she's not a substitute for medical or dietary advice.</p></div></div>
 
-      <div class="faq-item"><button class="faq-q">Is the free tier actually usable?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Free gives you 10 chef messages a day, full recipe-library browse, 1 recipe adaptation to feel the magic, pantry tracking, and every safety guardrail. Pro adds the things you'd reach for daily — unlimited chat, voice cooking with Saffra's signature Nova voice, every recipe rewritten for your kitchen, receipt &amp; barcode scanning, recipe import from URLs and cookbook photos, and a personal library that learns your taste over time.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Is the free tier actually usable?<span class="faq-icon">+</span></button><div class="faq-a"><p>Yes. Free gives you 10 chef messages a day, full recipe-library browse, 1 recipe adaptation to feel the magic, pantry tracking, and every safety guardrail. Pro adds the things you'd reach for daily — unlimited chat, voice cooking with Saffra's signature voice, every recipe rewritten for your kitchen, receipt &amp; barcode scanning, recipe import from URLs and cookbook photos, and a personal library that learns your taste over time.</p></div></div>
 
       <div class="faq-item"><button class="faq-q">How are Saffra's recipes different from AI-generated ones?<span class="faq-icon">+</span></button><div class="faq-a"><p>Most "AI cooking" apps generate recipes on the fly — one model, one pass, no review. The result is the AI-slop you've seen in the news: charcoal Christmas cakes, hollandaise hallucinations, recipes that assume you have ingredients you don't. Saffra works differently. Her flagship catalog is <strong>panel-vetted</strong>: every recipe goes through a trained chef-panel of three chef-trained perspectives. They research the dish from many sources, debate the technique, identify common mistakes, and only ship the version they all agree on. What you cook is the recipe that survived three independent perspectives — which is why it's more likely to actually work the first time, taste authentic, and not be missing critical detail. Then Saffra adapts that vetted recipe to your kitchen.</p></div></div>
 
@@ -1377,12 +1379,16 @@
       });
       shotsPreloaded = true;
     }
+    document.getElementById('modeBoth').classList.toggle('active', mode === 'both');
     document.getElementById('modeLight').classList.toggle('active', mode === 'light');
     document.getElementById('modeDark').classList.toggle('active', mode === 'dark');
     grid.classList.add('switching');
     setTimeout(function() {
       grid.querySelectorAll('.shot').forEach(function(img) {
-        if (img.dataset[mode]) img.src = img.dataset[mode];
+        // In "both" mode each card keeps its baked-in appearance (data-both);
+        // "light"/"dark" force the whole set to one look.
+        var target = mode === 'both' ? img.dataset[img.dataset.both || 'light'] : img.dataset[mode];
+        if (target) img.src = target;
       });
       grid.classList.remove('switching');
     }, 250);
