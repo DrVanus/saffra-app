@@ -535,13 +535,19 @@
       background: var(--secondary);
     }
 
-    /* "Take a look inside" gallery — real screenshots of the app's main surfaces */
+    /* "Take a look inside" gallery — real screenshots of the app's main
+       surfaces. Flex (not grid) so the 7 cards wrap 4 + 3 with the short
+       row centered. */
     .gallery-grid {
-      display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 32px 18px;
       margin-top: 48px;
-      align-items: end;
+      align-items: flex-end;
     }
-    .gallery-card { text-align: center; }
+    .gallery-card {
+      text-align: center;
+      flex: 0 1 calc(25% - 14px);
+      min-width: 200px;
+    }
     .gallery-card .shot-wrap {
       position: relative;
       display: flex; align-items: center; justify-content: center;
@@ -570,11 +576,16 @@
       line-height: 1.5; max-width: 220px; margin: 0 auto;
     }
     @media (max-width: 1099px) {
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+      .gallery-card { flex-basis: calc(50% - 14px); max-width: 340px; }
+      .gallery-grid { gap: 32px 28px; }
     }
     @media (max-width: 600px) {
-      .gallery-grid { grid-template-columns: 1fr; max-width: 360px; margin-left: auto; margin-right: auto; gap: 36px; }
+      .gallery-grid { max-width: 360px; margin-left: auto; margin-right: auto; gap: 36px; }
+      .gallery-card { flex-basis: 100%; max-width: none; }
     }
+    /* Cross-fade when the light/dark toggle swaps the gallery set. */
+    .gallery-card .shot { transition: transform 0.4s ease, opacity 0.25s ease; }
+    .gallery-grid.switching .shot { opacity: 0; }
 
     /* Intelligence section — the "why she's actually a chef" credibility layer */
     .intelligence-grid {
@@ -848,24 +859,26 @@
       </div>
       <div class="hero-screenshot">
         <div class="hero-phone-wrap">
-          <!-- Hero rotator: cross-fades through the app's signature surfaces.
-               Order tells the story — greet, ask, browse, search, cook. -->
+          <!-- Hero rotator: cross-fades through the app's signature surfaces,
+               deliberately alternating light and dark mode so both looks show
+               without a single click. Order tells the story — greet, ask,
+               browse, cook, search. -->
           <div class="hero-phone-frame" id="heroRotator">
             <img class="hero-phone-img is-active"
-                 src="screenshots/01-chef-tab.png"
-                 alt="Saffra Chef tab — pantry-aware quick-start prompts">
+                 src="screenshots/01-chef-tab-light.png"
+                 alt="Saffra Chef tab in light mode — pantry-aware quick-start prompts">
             <img class="hero-phone-img"
-                 src="screenshots/07-chat-recipe.png"
-                 alt="Ask Saffra — she answers with a recipe pulled from the catalog">
+                 src="screenshots/07-chat-recipe-dark.png"
+                 alt="Ask Saffra in dark mode — she answers with a recipe pulled from the catalog">
             <img class="hero-phone-img"
-                 src="screenshots/05-recipes.png"
-                 alt="Recipes — a panel-vetted catalog with Saffra's daily pick">
+                 src="screenshots/05-recipes-light.png"
+                 alt="Recipes in light mode — a panel-vetted catalog with Saffra's daily pick">
             <img class="hero-phone-img"
-                 src="screenshots/06-search.png"
-                 alt="Search — semantic recipe search across the whole catalog">
+                 src="screenshots/02-cooking-mode-dark.png"
+                 alt="Cooking Mode in dark mode — hands-free voice with a suggested step timer">
             <img class="hero-phone-img"
-                 src="screenshots/02-cooking-mode.png"
-                 alt="Cooking Mode — hands-free voice with a Live Activity timer">
+                 src="screenshots/06-search-light.png"
+                 alt="Search in light mode — semantic recipe search across the whole catalog">
           </div>
         </div>
       </div>
@@ -927,49 +940,86 @@
 
 <div class="section-divider"></div>
 
-<!-- Take a look inside — visual gallery of the app's main surfaces -->
+<!-- Take a look inside — visual gallery of the app's main surfaces.
+     Every shot ships in light AND dark; the toggle swaps the full set. -->
 <section id="screenshots">
   <div class="container">
     <div style="text-align:center" class="anim">
       <span class="section-label">Inside the App</span>
       <h2 class="section-title">Take a look <span class="gradient-text-warm">inside.</span></h2>
-      <p class="section-desc" style="margin:14px auto 0">Five screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded.</p>
+      <p class="section-desc" style="margin:14px auto 0">Seven screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded. And she's dressed for any hour: every surface ships in light and dark.</p>
+      <div class="pricing-toggle-wrap">
+        <div class="pricing-toggle" role="group" aria-label="Screenshot appearance">
+          <button class="toggle-btn active" id="modeLight" onclick="setShotMode('light')">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>Light</button>
+          <button class="toggle-btn" id="modeDark" onclick="setShotMode('dark')">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Dark</button>
+        </div>
+      </div>
     </div>
     <div class="gallery-grid">
       <div class="gallery-card anim anim-d1">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/01-chef-tab.png" alt="Chef tab — time-of-day greeting and contextual quick-start prompts">
+          <img class="shot" src="screenshots/01-chef-tab-light.png"
+               data-light="screenshots/01-chef-tab-light.png" data-dark="screenshots/01-chef-tab-dark.png"
+               alt="Chef tab — time-of-day greeting, live pantry pills, and contextual quick-start prompts">
         </div>
         <h4>Chef tab</h4>
-        <p>Time-of-day greeting, live pantry pills, four contextual quick-starts.</p>
+        <p>Time-of-day greeting, live pantry pills, quick-starts built from what's on hand.</p>
       </div>
       <div class="gallery-card anim anim-d2">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/07-chat-recipe.png" alt="Ask Saffra — she checks your pantry, then answers with a real recipe from the catalog you can open or cook">
+          <img class="shot" src="screenshots/07-chat-recipe-light.png"
+               data-light="screenshots/07-chat-recipe-light.png" data-dark="screenshots/07-chat-recipe-dark.png"
+               alt="Ask Saffra — she checks your pantry with visible tool calls, then answers with a real recipe card from the catalog">
         </div>
         <h4>Ask Saffra</h4>
-        <p>She checks your pantry, then answers with a real recipe from the catalog — tap to open it or start cooking.</p>
+        <p>Watch her work: she checks your pantry, searches the catalog, and answers with a real recipe — one tap to open or cook it.</p>
       </div>
       <div class="gallery-card anim anim-d3">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/04-chat-tool.png" alt="Recipe detail — pantry-aware ingredients, at-a-glance timing, and one tap into Cooking Mode">
+          <img class="shot" src="screenshots/04-recipe-detail-light.png"
+               data-light="screenshots/04-recipe-detail-light.png" data-dark="screenshots/04-recipe-detail-dark.png"
+               alt="Recipe detail — at-a-glance timing, difficulty and servings, pantry-aware ingredients, one tap into Cooking Mode">
         </div>
         <h4>Every recipe adapts</h4>
-        <p>Pantry-aware ingredients, at-a-glance timing, diet tags — then one tap into hands-free Cooking Mode.</p>
+        <p>At-a-glance timing, servings you can scale, ingredients checked against your pantry — then one tap into "Let's cook."</p>
       </div>
       <div class="gallery-card anim anim-d4">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/02-cooking-mode.png" alt="Cooking Mode with Live Activity timer in the Dynamic Island and the hey saffra wake phrase pill">
+          <img class="shot" src="screenshots/02-cooking-mode-light.png"
+               data-light="screenshots/02-cooking-mode-light.png" data-dark="screenshots/02-cooking-mode-dark.png"
+               alt="Cooking Mode — step-by-step cards Saffra reads aloud, with a suggested timer and an ask-saffra bar">
         </div>
         <h4>Cooking Mode</h4>
-        <p>Hands-free narration. Voice timers in the Dynamic Island. "Hey saffra, next step."</p>
+        <p>She reads each step aloud and suggests the timer. "Hey saffra, next step" — your hands never touch the screen.</p>
       </div>
       <div class="gallery-card anim anim-d5">
         <div class="shot-wrap">
-          <img class="shot" src="screenshots/03-pantry.png" alt="Pantry view with categories, expiring items badged for use-it-up suggestions">
+          <img class="shot" src="screenshots/03-pantry-light.png"
+               data-light="screenshots/03-pantry-light.png" data-dark="screenshots/03-pantry-dark.png"
+               alt="Your kitchen — pantry counts, expiring and stale flags, and add-by-photo, receipt, barcode, or hand">
         </div>
-        <h4>Pantry</h4>
-        <p>Track what you have. Items going off get flagged for tonight's dinner.</p>
+        <h4>Your kitchen</h4>
+        <p>Snap your fridge, scan a receipt or barcode. Items going stale get flagged — and turned into tonight's dinner.</p>
+      </div>
+      <div class="gallery-card anim anim-d6">
+        <div class="shot-wrap">
+          <img class="shot" src="screenshots/05-recipes-light.png"
+               data-light="screenshots/05-recipes-light.png" data-dark="screenshots/05-recipes-dark.png"
+               alt="Recipes tab — Saffra's meal pick of the moment above quick rails from the panel-vetted catalog">
+        </div>
+        <h4>Recipes</h4>
+        <p>2,100+ panel-vetted dishes, led by Saffra's pick for this exact meal — thumbs it down and she re-rolls.</p>
+      </div>
+      <div class="gallery-card anim anim-d7">
+        <div class="shot-wrap">
+          <img class="shot" src="screenshots/06-search-light.png"
+               data-light="screenshots/06-search-light.png" data-dark="screenshots/06-search-dark.png"
+               alt="Search — semantic recipe search with cuisine, time, and diet refinements">
+        </div>
+        <h4>Search</h4>
+        <p>Type what you're craving. Semantic search finds it across the catalog, with cuisine, time, and diet filters.</p>
       </div>
     </div>
   </div>
@@ -1298,6 +1348,45 @@
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.anim').forEach(function(el) { observer.observe(el); });
+
+  // Reveal fallback: if IntersectionObserver never fires (some embedded
+  // webviews / readers), no .anim content would EVER paint. A cheap rect
+  // check on scroll/resize reveals anything already in the viewport.
+  function revealFallback() {
+    document.querySelectorAll('.anim:not(.visible)').forEach(function(el) {
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('visible');
+    });
+  }
+  window.addEventListener('scroll', revealFallback, { passive: true });
+  window.addEventListener('resize', revealFallback, { passive: true });
+  setTimeout(revealFallback, 800);
+
+  // Light/dark screenshot toggle — swaps every gallery shot to the other
+  // appearance set with a quick fade. Sources are preloaded on first switch
+  // so the fade never reveals a half-loaded image.
+  var shotsPreloaded = false;
+  function setShotMode(mode) {
+    var grid = document.querySelector('.gallery-grid');
+    if (!grid) return;
+    if (!shotsPreloaded) {
+      grid.querySelectorAll('.shot').forEach(function(img) {
+        ['light', 'dark'].forEach(function(m) {
+          if (img.dataset[m]) { var p = new Image(); p.src = img.dataset[m]; }
+        });
+      });
+      shotsPreloaded = true;
+    }
+    document.getElementById('modeLight').classList.toggle('active', mode === 'light');
+    document.getElementById('modeDark').classList.toggle('active', mode === 'dark');
+    grid.classList.add('switching');
+    setTimeout(function() {
+      grid.querySelectorAll('.shot').forEach(function(img) {
+        if (img.dataset[mode]) img.src = img.dataset[mode];
+      });
+      grid.classList.remove('switching');
+    }, 250);
+  }
 
   // Hero phone rotator — cross-fade through the signature screens on a timer.
   (function() {
