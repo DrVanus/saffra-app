@@ -543,58 +543,6 @@
       background: var(--secondary);
     }
 
-    /* "Take a look inside" gallery — real screenshots of the app's main
-       surfaces. Flex (not grid) so the 7 cards wrap 4 + 3 with the short
-       row centered. */
-    .gallery-grid {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 32px 18px;
-      margin-top: 48px;
-      align-items: flex-end;
-    }
-    .gallery-card {
-      text-align: center;
-      flex: 0 1 calc(25% - 14px);
-      min-width: 200px;
-    }
-    .gallery-card .shot-wrap {
-      position: relative;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 18px;
-    }
-    .gallery-card .shot-wrap::before {
-      content: ''; position: absolute; inset: -16px;
-      border-radius: 2.5rem;
-      background: radial-gradient(ellipse, rgba(224,130,48,0.18), transparent 65%);
-      filter: blur(20px);
-      pointer-events: none;
-    }
-    .gallery-card .shot {
-      position: relative;
-      width: 100%; height: auto; aspect-ratio: 540 / 1100;
-      object-fit: contain;
-      transition: transform 0.4s ease;
-    }
-    .gallery-card:hover .shot { transform: translateY(-4px) scale(1.02); }
-    .gallery-card h4 {
-      font-size: 1rem; font-weight: 700;
-      color: #F5EFE5; margin-bottom: 6px; letter-spacing: -0.01em;
-    }
-    .gallery-card p {
-      font-size: 0.85rem; color: var(--muted-fg);
-      line-height: 1.5; max-width: 220px; margin: 0 auto;
-    }
-    @media (max-width: 1099px) {
-      .gallery-card { flex-basis: calc(50% - 14px); max-width: 340px; }
-      .gallery-grid { gap: 32px 28px; }
-    }
-    @media (max-width: 600px) {
-      .gallery-grid { max-width: 360px; margin-left: auto; margin-right: auto; gap: 36px; }
-      .gallery-card { flex-basis: 100%; max-width: none; }
-    }
-    /* Cross-fade when the light/dark toggle swaps the gallery set. */
-    .gallery-card .shot { transition: transform 0.4s ease, opacity 0.25s ease; }
-    .gallery-grid.switching .shot { opacity: 0; }
-
     /* Intelligence section — the "why she's actually a chef" credibility layer */
     .intelligence-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 48px;
@@ -1062,95 +1010,6 @@
         <div class="chat-tool">Checking your pantry · 9 items</div>
         <div class="chat-bubble chat-chef">Quick one: let's do a skillet chicken thigh in a cilantro-tomato pan sauce over rice. Thirty minutes flat, one pan.</div>
         <div class="chat-bubble chat-chef" style="margin-bottom:0">The cilantro's going yellow — perfect time to use it. Want me to walk you through it hands-free?</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- Take a look inside — visual gallery of the app's main surfaces.
-     Every shot ships in light AND dark; the toggle swaps the full set. -->
-<section id="screenshots">
-  <div class="container">
-    <div style="text-align:center" class="anim">
-      <span class="section-label">Inside the App</span>
-      <h2 class="section-title">Take a look <span class="gradient-text-warm">inside.</span></h2>
-      <p class="section-desc" style="margin:14px auto 0">Seven screens, one chef. Built for the way you actually cook — pantry-aware, hands-free, recipe-grounded. And she's dressed for any hour: every surface ships in <strong>light and dark</strong> — flip the whole set below.</p>
-      <div class="pricing-toggle-wrap">
-        <div class="pricing-toggle" role="group" aria-label="Screenshot appearance">
-          <button class="toggle-btn active" id="modeBoth" onclick="setShotMode('both')">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>Both</button>
-          <button class="toggle-btn" id="modeLight" onclick="setShotMode('light')">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>Light</button>
-          <button class="toggle-btn" id="modeDark" onclick="setShotMode('dark')">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Dark</button>
-        </div>
-      </div>
-    </div>
-    <div class="gallery-grid">
-      <div class="gallery-card anim anim-d1">
-        <div class="shot-wrap">
-          <img class="shot" src="screenshots/01-chef-tab-light.png" data-both="light"
-               data-light="screenshots/01-chef-tab-light.png" data-dark="screenshots/01-chef-tab-dark.png"
-               alt="Chef tab — time-of-day greeting, live pantry pills, and contextual quick-start prompts">
-        </div>
-        <h4>Chef tab</h4>
-        <p>Time-of-day greeting, live pantry pills, quick-starts built from what's on hand.</p>
-      </div>
-      <div class="gallery-card anim anim-d2">
-        <div class="shot-wrap">
-          <img class="shot" src="screenshots/07-chat-recipe-dark.png" data-both="dark"
-               data-light="screenshots/07-chat-recipe-light.png" data-dark="screenshots/07-chat-recipe-dark.png"
-               alt="Ask Saffra — she checks your pantry with visible tool calls, then answers with a real recipe card from the catalog">
-        </div>
-        <h4>Ask Saffra</h4>
-        <p>Watch her work: she checks your pantry, searches the catalog, and answers with a real recipe — one tap to open or cook it.</p>
-      </div>
-      <div class="gallery-card anim anim-d3">
-        <div class="shot-wrap">
-          <img class="shot" src="screenshots/04-recipe-detail-light.png" data-both="light"
-               data-light="screenshots/04-recipe-detail-light.png" data-dark="screenshots/04-recipe-detail-dark.png"
-               alt="Recipe detail — at-a-glance timing, difficulty and servings, pantry-aware ingredients, one tap into Cooking Mode">
-        </div>
-        <h4>Every recipe adapts</h4>
-        <p>At-a-glance timing, servings you can scale, ingredients checked against your pantry — then one tap into "Let's cook."</p>
-      </div>
-      <div class="gallery-card anim anim-d4">
-        <div class="shot-wrap">
-          <img class="shot" src="screenshots/02-cooking-mode-dark.png" data-both="dark"
-               data-light="screenshots/02-cooking-mode-light.png" data-dark="screenshots/02-cooking-mode-dark.png"
-               alt="Cooking Mode — step-by-step cards Saffra reads aloud, with a suggested timer and an ask-saffra bar">
-        </div>
-        <h4>Cooking Mode</h4>
-        <p>She reads each step aloud and suggests the timer. "Hey saffra, next step" — your hands never touch the screen.</p>
-      </div>
-      <div class="gallery-card anim anim-d5">
-        <div class="shot-wrap">
-          <img class="shot" src="screenshots/03-pantry-light.png" data-both="light"
-               data-light="screenshots/03-pantry-light.png" data-dark="screenshots/03-pantry-dark.png"
-               alt="Your kitchen — pantry counts, expiring and stale flags, and add-by-photo, receipt, barcode, or hand">
-        </div>
-        <h4>Your kitchen</h4>
-        <p>Snap your fridge, scan a receipt or barcode. Items going stale get flagged — and turned into tonight's dinner.</p>
-      </div>
-      <div class="gallery-card anim anim-d6">
-        <div class="shot-wrap">
-          <img class="shot" src="screenshots/05-recipes-dark.png" data-both="dark"
-               data-light="screenshots/05-recipes-light.png" data-dark="screenshots/05-recipes-dark.png"
-               alt="Recipes tab — Saffra's meal pick of the moment above quick rails from the panel-vetted catalog">
-        </div>
-        <h4>Recipes</h4>
-        <p>2,100+ panel-vetted dishes, led by Saffra's pick for this exact meal — thumbs it down and she re-rolls.</p>
-      </div>
-      <div class="gallery-card anim anim-d7">
-        <div class="shot-wrap">
-          <img class="shot" src="screenshots/06-search-light.png" data-both="light"
-               data-light="screenshots/06-search-light.png" data-dark="screenshots/06-search-dark.png"
-               alt="Search — semantic recipe search with cuisine, time, and diet refinements">
-        </div>
-        <h4>Search</h4>
-        <p>Type what you're craving. Semantic search finds it across the catalog, with cuisine, time, and diet filters.</p>
       </div>
     </div>
   </div>
@@ -1788,36 +1647,6 @@
   window.addEventListener('scroll', revealFallback, { passive: true });
   window.addEventListener('resize', revealFallback, { passive: true });
   setTimeout(revealFallback, 800);
-
-  // Light/dark screenshot toggle — swaps every gallery shot to the other
-  // appearance set with a quick fade. Sources are preloaded on first switch
-  // so the fade never reveals a half-loaded image.
-  var shotsPreloaded = false;
-  function setShotMode(mode) {
-    var grid = document.querySelector('.gallery-grid');
-    if (!grid) return;
-    if (!shotsPreloaded) {
-      grid.querySelectorAll('.shot').forEach(function(img) {
-        ['light', 'dark'].forEach(function(m) {
-          if (img.dataset[m]) { var p = new Image(); p.src = img.dataset[m]; }
-        });
-      });
-      shotsPreloaded = true;
-    }
-    document.getElementById('modeBoth').classList.toggle('active', mode === 'both');
-    document.getElementById('modeLight').classList.toggle('active', mode === 'light');
-    document.getElementById('modeDark').classList.toggle('active', mode === 'dark');
-    grid.classList.add('switching');
-    setTimeout(function() {
-      grid.querySelectorAll('.shot').forEach(function(img) {
-        // In "both" mode each card keeps its baked-in appearance (data-both);
-        // "light"/"dark" force the whole set to one look.
-        var target = mode === 'both' ? img.dataset[img.dataset.both || 'light'] : img.dataset[mode];
-        if (target) img.src = target;
-      });
-      grid.classList.remove('switching');
-    }, 250);
-  }
 
   // Hero phone rotator — cross-fade through the signature screens on a timer.
   (function() {
