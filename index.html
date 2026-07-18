@@ -64,21 +64,26 @@
 
     .container { max-width: 1152px; margin: 0 auto; padding: 0 24px; }
 
+    /* padding-bottom on all background-clip:text spans keeps descenders
+       (g, y, p) inside the paint box — without it they clip at the baseline. */
     .gradient-text-warm {
+      display: inline-block;
       background: linear-gradient(135deg, #F5C088 0%, #E08230 50%, #B8651C 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      padding-bottom: 0.12em;
+      padding-bottom: 0.16em; margin-bottom: -0.16em;
     }
     .gradient-text-green {
+      display: inline-block;
       background: linear-gradient(135deg, #8FCB93 0%, #5BA15F 50%, #3B7A3F 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      padding-bottom: 0.12em;
+      padding-bottom: 0.16em; margin-bottom: -0.16em;
     }
     .italic-anything {
+      display: inline-block;
       font-family: 'Playfair Display', 'Inter', serif;
       font-style: italic;
       font-weight: 600;
@@ -86,7 +91,10 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      padding-bottom: 0.12em;
+      padding-bottom: 0.16em; margin-bottom: -0.16em;
+      /* Italic Playfair overhangs its right edge — keep the final letter +
+         period from clipping against the inline-block boundary. */
+      padding-right: 0.08em;
     }
 
     .btn-warm {
@@ -767,6 +775,122 @@
       font-size: 0.72rem; color: rgba(154,142,128,0.5);
     }
 
+    /* Feature-detail sections — one section per major feature, CryptoSage
+       style: copy on one side, real device screenshots on the other,
+       alternating direction section to section (.fd-flip). */
+    .fd-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center; margin-top: 48px;
+    }
+    .fd-copy .section-label { margin-bottom: 10px; }
+    .fd-copy h2 { font-size: 2.1rem; font-weight: 800; line-height: 1.22; letter-spacing: -0.025em; padding-bottom: 0.1em; }
+    .fd-copy > p { font-size: 0.98rem; color: var(--muted-fg); line-height: 1.7; margin-top: 14px; }
+    .fd-points { list-style: none; margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .fd-points li { display: flex; gap: 14px; align-items: flex-start; }
+    .fd-points .icon-box { width: 38px; height: 38px; border-radius: 9px; }
+    .fd-points .icon-box svg { width: 18px; height: 18px; }
+    .fd-points h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 3px; }
+    .fd-points p { font-size: 0.84rem; color: var(--muted-fg); line-height: 1.55; }
+    .fd-shots {
+      display: flex; gap: 22px; justify-content: center; align-items: flex-end;
+      position: relative;
+    }
+    .fd-shots::before {
+      content: ''; position: absolute; inset: -24px;
+      border-radius: 3rem;
+      background: radial-gradient(ellipse, rgba(224,130,48,0.14), transparent 68%);
+      filter: blur(26px); pointer-events: none;
+    }
+    .fd-shot { position: relative; text-align: center; }
+    .fd-shot img {
+      width: 250px; height: auto; object-fit: contain;
+      transition: transform 0.4s ease;
+    }
+    .fd-shot:hover img { transform: translateY(-4px); }
+    .fd-shot .fd-shot-caption {
+      margin-top: 12px; font-size: 0.75rem; font-weight: 600;
+      color: var(--muted-fg); letter-spacing: 0.02em;
+    }
+    /* Two-shot layouts: stagger the pair so it reads as a moment in time,
+       not a static grid. */
+    .fd-shots.pair .fd-shot:first-child { margin-bottom: 40px; }
+    .fd-grid.fd-flip .fd-copy { order: 2; }
+    .fd-grid.fd-flip .fd-shots { order: 1; }
+
+    /* Time-of-day strip — four phones, one per meal slot. */
+    .time-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px 20px;
+      margin-top: 52px;
+    }
+    .time-card { text-align: center; }
+    .time-card .time-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 14px; border-radius: 16px; margin-bottom: 16px;
+      background: rgba(224,130,48,0.07); border: 1px solid var(--border);
+      font-size: 0.74rem; font-weight: 700; color: #F5C088;
+      letter-spacing: 0.04em;
+    }
+    .time-card .time-tag svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .time-card .shot-wrap { position: relative; margin-bottom: 16px; }
+    .time-card .shot-wrap::before {
+      content: ''; position: absolute; inset: -14px;
+      border-radius: 2.5rem;
+      background: radial-gradient(ellipse, rgba(224,130,48,0.16), transparent 65%);
+      filter: blur(18px); pointer-events: none;
+    }
+    .time-card img {
+      position: relative; width: 100%; height: auto; object-fit: contain;
+      transition: transform 0.4s ease;
+    }
+    .time-card:hover img { transform: translateY(-4px); }
+    .time-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 5px; letter-spacing: -0.01em; }
+    .time-card p { font-size: 0.8rem; color: var(--muted-fg); line-height: 1.5; max-width: 230px; margin: 0 auto; }
+
+    /* Cooking-mode flow strip — how a cook actually plays out. */
+    .cook-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 56px; }
+    .cook-flow-step {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 18px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .cook-flow-step .cf-num {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em;
+      color: var(--primary); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .cook-flow-step h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; }
+    .cook-flow-step p { font-size: 0.8rem; color: var(--muted-fg); line-height: 1.55; }
+
+    /* "What she can see" context chips in the AI section. */
+    .context-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .context-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 15px; border-radius: 20px;
+      background: rgba(224,130,48,0.06); border: 1px solid var(--border);
+      font-size: 0.78rem; font-weight: 600; color: #F5C088;
+    }
+    .context-chip svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .context-chip.green { background: rgba(91,161,95,0.08); border-color: rgba(91,161,95,0.2); color: #8FCB93; }
+
+    @media (max-width: 1099px) {
+      .time-strip { grid-template-columns: repeat(2, 1fr); max-width: 560px; margin-left: auto; margin-right: auto; }
+      .cook-flow { grid-template-columns: repeat(2, 1fr); }
+      .fd-grid { gap: 44px; }
+      .fd-shot img { width: 220px; }
+    }
+    @media (max-width: 900px) {
+      .fd-grid { grid-template-columns: 1fr; gap: 40px; }
+      .fd-grid.fd-flip .fd-copy { order: 1; }
+      .fd-grid.fd-flip .fd-shots { order: 2; }
+      .fd-shots.pair .fd-shot:first-child { margin-bottom: 0; }
+      .fd-copy h2 { font-size: 1.8rem; }
+    }
+    @media (max-width: 600px) {
+      .time-strip { grid-template-columns: 1fr; max-width: 300px; }
+      .cook-flow { grid-template-columns: 1fr; }
+      .fd-shots { flex-wrap: wrap; gap: 28px; }
+      .fd-shot img { width: min(250px, 78vw); }
+    }
+
     /* Responsive */
     @media (max-width: 1099px) {
       .section-title { font-size: 2.15rem; }
@@ -832,7 +956,9 @@
     </a>
     <div class="nav-links" id="navLinks">
       <a href="#screenshots">Inside</a>
+      <a href="#time-aware">Time-Aware</a>
       <a href="#intelligence">The AI</a>
+      <a href="#cooking-mode">Cooking Mode</a>
       <a href="#features">Features</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
@@ -879,6 +1005,9 @@
             <img class="hero-phone-img"
                  src="screenshots/06-search-light.png"
                  alt="Search in light mode — semantic recipe search across the whole catalog">
+            <img class="hero-phone-img"
+                 src="screenshots/10-recipes-dinner-dark.png"
+                 alt="Recipes at dinner time in dark mode — Saffra picks for tonight">
           </div>
         </div>
       </div>
@@ -1029,6 +1158,59 @@
 
 <div class="section-divider"></div>
 
+<!-- Time-aware home — the Recipes tab re-organizes around the meal you're
+     actually about to cook. Light shots for morning/midday, dark for
+     evening/night: the strip itself reads like a day passing. -->
+<section id="time-aware">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">Time-Aware Home</span>
+      <h2 class="section-title">She knows what<br><span class="gradient-text-warm">time it is.</span></h2>
+      <p class="section-desc" style="margin:14px auto 0">Open Saffra at 7 AM and the Recipes tab is a breakfast app. Open it at midnight and it's a late-night one. The quick rail, the order of every section, and Saffra's headline pick all re-rank around the meal you're actually about to cook — no tapping, no filters, no settings.</p>
+    </div>
+    <div class="time-strip">
+      <div class="time-card anim anim-d1">
+        <div class="time-tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>7:00 AM</div>
+        <div class="shot-wrap">
+          <img src="screenshots/08-recipes-breakfast-light.png" loading="lazy"
+               alt="Recipes tab in the morning — Saffra's breakfast pick and a Quick breakfast rail">
+        </div>
+        <h4>Morning</h4>
+        <p>"Quick breakfast" leads. Pancakes and shakshuka up front — heavy dinner mains stay out of the morning rail.</p>
+      </div>
+      <div class="time-card anim anim-d2">
+        <div class="time-tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>12:30 PM</div>
+        <div class="shot-wrap">
+          <img src="screenshots/09-recipes-lunch-light.png" loading="lazy"
+               alt="Recipes tab at midday — Saffra's lunch pick with bowls and salads ranked first">
+        </div>
+        <h4>Midday</h4>
+        <p>"Quick lunch" takes over — bowls, salads, and fast mains, led by Saffra's lunch pick.</p>
+      </div>
+      <div class="time-card anim anim-d3">
+        <div class="time-tag"><svg viewBox="0 0 24 24"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/></svg>6:30 PM</div>
+        <div class="shot-wrap">
+          <img src="screenshots/10-recipes-dinner-dark.png" loading="lazy"
+               alt="Recipes tab in the evening — Saffra picks for tonight with a Quick tonight rail">
+        </div>
+        <h4>Evening</h4>
+        <p>"Saffra picks for tonight." The dinner canon — pasta, chicken, soups — ranks to the top for the main event.</p>
+      </div>
+      <div class="time-card anim anim-d4">
+        <div class="time-tag"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>11:50 PM</div>
+        <div class="shot-wrap">
+          <img src="screenshots/11-recipes-latenight-dark.png" loading="lazy"
+               alt="Recipes tab late at night — a late-night pick and a rail of 25-minute dishes">
+        </div>
+        <h4>Late night</h4>
+        <p>"Late-night quick" — nothing over 25 minutes, nothing that needs a supermarket run. Fried rice territory.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
 <!-- Built like a chef — the AI / intelligence layer -->
 <section id="intelligence">
   <div class="container">
@@ -1038,7 +1220,33 @@
       <p class="section-desc" style="margin:14px auto 0">Generic "AI cooking" tools paste a recipe into a chatbot and call it a day. Every layer of Saffra is built for cooking specifically — with knowledge, memory, and rules a general-purpose AI doesn't have.</p>
     </div>
 
-    <div class="intelligence-grid">
+    <!-- The context layer: what Saffra can actually see when you ask her
+         something. One real chat, annotated. -->
+    <div class="fd-grid">
+      <div class="fd-copy anim">
+        <span class="section-label">Full App Context</span>
+        <h2>She reads everything going on <span class="gradient-text-warm">in the app.</span></h2>
+        <p>When you ask "what can I make tonight?", Saffra isn't answering cold. Before she says a word, she can check your pantry, your cook history, the clock, and your profile — the same way a chef glances at the walk-in before calling the special. Watch the tool chips in a real chat: that's her actually looking, not pretending to.</p>
+        <div class="context-chips">
+          <span class="context-chip"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M8 6V4M16 6V4"/></svg>What's in your pantry</span>
+          <span class="context-chip green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Time of day</span>
+          <span class="context-chip"><svg viewBox="0 0 24 24"><path d="M12 20.35l-1.45-1.32C5.4 14.36 2 11.28 2 7.5 2 4.42 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09C13.09 2.81 14.76 2 16.5 2 19.58 2 22 4.42 22 7.5c0 3.78-3.4 6.86-8.55 11.54L12 20.35z"/></svg>Dishes you've loved</span>
+          <span class="context-chip green"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Allergies &amp; diet</span>
+          <span class="context-chip"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>Your skill level</span>
+          <span class="context-chip green"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 3h6"/></svg>The time you've got</span>
+          <span class="context-chip"><svg viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>Recipes you've saved</span>
+        </div>
+      </div>
+      <div class="fd-shots anim">
+        <div class="fd-shot">
+          <img src="screenshots/07-chat-recipe-dark.png" loading="lazy"
+               alt="Ask Saffra — visible tool chips show her checking the pantry and searching recipes before answering with a recipe card">
+          <div class="fd-shot-caption">Tool chips = her actually checking, live</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="intelligence-grid" style="margin-top:56px">
       <div class="intelligence-card anim anim-d1">
         <div class="icon-box"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg></div>
         <h3>A real chef persona — not a generic LLM</h3>
@@ -1083,6 +1291,223 @@
       <div class="intel-stat">
         <div class="intel-stat-num gradient-text-warm">230,000+</div>
         <div class="intel-stat-label">Recipes, Semantically Searchable</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Cooking Mode — the signature surface, explained step by step. -->
+<section id="cooking-mode">
+  <div class="container">
+    <div style="text-align:center" class="anim">
+      <span class="section-label">Cooking Mode</span>
+      <h2 class="section-title">One step at a time.<br><span class="gradient-text-warm">Hands never touch the screen.</span></h2>
+      <p class="section-desc" style="margin:14px auto 0">Tap "Let's cook" on any recipe and the whole phone becomes a chef at your shoulder. One step per screen, big enough to read from across the counter, with a photo of the dish, the exact ingredients this step needs, and a timer she's already sized for you.</p>
+    </div>
+
+    <div class="fd-grid">
+      <div class="fd-copy anim">
+        <ul class="fd-points">
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 1v22M19 12a7 7 0 0 1-14 0M9 8a3 3 0 0 1 6 0v4a3 3 0 0 1-6 0V8z"/></svg></div>
+            <div><h4>She reads every step aloud</h4><p>Saffra narrates in her signature voice, then listens. "Hey saffra, next step" — "replay that" — "how long on the timer?" Your hands stay in the food.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M8 6V4M16 6V4"/></svg></div>
+            <div><h4>Just the ingredients this step needs</h4><p>Each step card pulls out exactly what you're reaching for — "spaghetti, salt" — so you're never re-scanning the full list mid-sizzle.</p></div>
+          </li>
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 3h6"/></svg></div>
+            <div><h4>Timers she's already sized</h4><p>"15 min — saffra suggests this timer." One tap (or one sentence) and it's running in the Dynamic Island, even if you leave the app.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div><h4>Ask anything, mid-step</h4><p>"Why reserve the pasta water?" The ask-saffra bar answers inline without leaving the step — and a "coming up" preview keeps you one move ahead.</p></div>
+          </li>
+        </ul>
+      </div>
+      <div class="fd-shots pair anim">
+        <div class="fd-shot">
+          <img src="screenshots/02-cooking-mode-light.png" loading="lazy"
+               alt="Cooking Mode step 1 — Saffra reads the step aloud with ingredient chips and a suggested 15-minute timer">
+          <div class="fd-shot-caption">Step 1 — she's reading it aloud</div>
+        </div>
+        <div class="fd-shot">
+          <img src="screenshots/14-cooking-step2-dark.png" loading="lazy"
+               alt="Cooking Mode mid-recipe — the dish photo on the step card with progress bar and hands-free controls">
+          <div class="fd-shot-caption">Mid-recipe, dark mode</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cook-flow">
+      <div class="cook-flow-step anim anim-d1"><div class="cf-num">Step 1</div><h4>Tap "Let's cook"</h4><p>Any recipe, one tap. The screen clears to a single step with a progress bar — no scrolling a wall of instructions with wet hands.</p></div>
+      <div class="cook-flow-step anim anim-d2"><div class="cf-num">Step 2</div><h4>She reads, you cook</h4><p>Saffra narrates the step and waits. The wake phrase "hey saffra" is armed only here — never anywhere else in the app.</p></div>
+      <div class="cook-flow-step anim anim-d3"><div class="cf-num">Step 3</div><h4>Timers run themselves</h4><p>Say "set the timer" and it lands in Live Activities — Lock Screen and Dynamic Island. Multiple timers, all labeled.</p></div>
+      <div class="cook-flow-step anim anim-d4"><div class="cf-num">Step 4</div><h4>Finish with a photo</h4><p>The last step ends with "I'm done — tap to snap a photo." Your cook lands in your history, and she remembers how it went.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Ask Saffra — the chat surface. -->
+<section id="ask-saffra">
+  <div class="container">
+    <div class="fd-grid fd-flip">
+      <div class="fd-copy anim">
+        <span class="section-label">Ask Saffra</span>
+        <h2>A chef on the other end —<br><span class="gradient-text-warm">not a search box.</span></h2>
+        <p>The Saffra tab opens with a time-of-day greeting, your pantry at a glance, and quick-starts built from what's actually in your kitchen. Ask anything — she answers like a chef, and when a recipe is the answer, she hands you a real card from the vetted catalog: one tap to open it, one more to cook it.</p>
+        <ul class="fd-points">
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div><h4>Real recipes, not improvised ones</h4><p>"What can I make tonight?" gets a recipe card pulled from the panel-vetted catalog — never a hallucinated list of steps.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M16 4l4 4M3 12a9 9 0 0 1 9-9"/></svg></div>
+            <div><h4>You can watch her work</h4><p>Tool chips show each check as it happens — pantry scan, catalog search — so an answer is never a black box.</p></div>
+          </li>
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><h4>Quick-starts that fit the moment</h4><p>Morning greeting, evening greeting, late-night greeting — with one-tap prompts shaped by the hour and your on-hand ingredients.</p></div>
+          </li>
+        </ul>
+      </div>
+      <div class="fd-shots pair anim">
+        <div class="fd-shot">
+          <img src="screenshots/01-chef-tab-light.png" loading="lazy"
+               alt="The Saffra tab — time-of-day greeting, pantry pills, and quick-start prompts">
+          <div class="fd-shot-caption">The greeting knows your kitchen</div>
+        </div>
+        <div class="fd-shot">
+          <img src="screenshots/07-chat-recipe-light.png" loading="lazy"
+               alt="Ask Saffra answering with a tappable recipe card after checking the pantry">
+          <div class="fd-shot-caption">She answers with a real recipe</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Pantry — scan / snap / barcode. -->
+<section id="pantry">
+  <div class="container">
+    <div class="fd-grid">
+      <div class="fd-copy anim">
+        <span class="section-label">Your Kitchen</span>
+        <h2>A pantry that fills itself —<br><span class="gradient-text-warm">and empties smart.</span></h2>
+        <p>Saffra can only cook from your kitchen if she knows what's in it — so getting food into the app takes seconds, not typing. And once it's in, freshness is tracked: things about to turn get flagged and pitched for tonight's dinner instead of the trash.</p>
+        <ul class="fd-points">
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+            <div><h4>Snap your fridge</h4><p>Photograph a shelf and she identifies what's on it. Items land categorized, no typing.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10M7 12h10M7 17h6"/></svg></div>
+            <div><h4>Scan a receipt</h4><p>On-device OCR reads the lines, AI parses them into clean items — your photo never leaves the phone.</p></div>
+          </li>
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14"/></svg></div>
+            <div><h4>Or beep the barcode</h4><p>Lookup runs against Open Food Facts — items arrive pre-tagged with category, expiration, and allergen flags.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div><h4>Expiring? It's dinner.</h4><p>Items going stale get flagged in the pantry and surfaced in chat — "the cilantro's going yellow, let's use it tonight."</p></div>
+          </li>
+        </ul>
+      </div>
+      <div class="fd-shots anim">
+        <div class="fd-shot">
+          <img src="screenshots/03-pantry-light.png" loading="lazy"
+               alt="The pantry — item counts by category with expiring and stale flags, plus photo, receipt, and barcode capture">
+          <div class="fd-shot-caption">Grocery, fridge &amp; freshness at a glance</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Search — semantic, filterable. -->
+<section id="search">
+  <div class="container">
+    <div class="fd-grid fd-flip">
+      <div class="fd-copy anim">
+        <span class="section-label">Search</span>
+        <h2>Type a craving,<br><span class="gradient-text-warm">get dinner.</span></h2>
+        <p>Search runs on vector embeddings across 230,000+ recipes — so "cozy noodle soup" and "something bright with lemon" work as well as exact titles. Every result comes back as a photo card with time and cuisine up front, and refinements for time, diet, and cuisine are one tap away.</p>
+        <ul class="fd-points">
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+            <div><h4>Meaning, not keywords</h4><p>Semantic search understands the dish you're describing — no more guessing the magic word a recipe site indexed.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></div>
+            <div><h4>Filters that matter</h4><p>Under 30 minutes. Vegetarian. Thai. Stack refinements and the results re-rank instantly.</p></div>
+          </li>
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+            <div><h4>Vetted first</h4><p>Panel-vetted flagship recipes rank above the wider index, so the top results are the ones that survived three chefs' review.</p></div>
+          </li>
+        </ul>
+      </div>
+      <div class="fd-shots anim">
+        <div class="fd-shot">
+          <img src="screenshots/06-search-dark.png" loading="lazy"
+               alt="Search — photo-card results for a pasta query with cuisine and time shown on every card">
+          <div class="fd-shot-caption">Every result is a photo card</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Recipe detail — what a vetted recipe looks like up close. -->
+<section id="recipe-detail">
+  <div class="container">
+    <div class="fd-grid">
+      <div class="fd-copy anim">
+        <span class="section-label">The Recipe Page</span>
+        <h2>Everything you need to know<br><span class="gradient-text-warm">before you commit.</span></h2>
+        <p>A recipe page should answer one question fast: can I cook this, tonight, with what I have? Timing, difficulty, and servings sit at the top; ingredients are checked against your pantry; and the whole thing ends in one button — "Let's cook."</p>
+        <ul class="fd-points">
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><h4>The vitals, at a glance</h4><p>Prep, cook, and total time, difficulty, and servings you can scale — the recipe recalculates quantities for you.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div><h4>Ingredients vs. your pantry</h4><p>What you have is marked; what you're missing can go straight to a shopping list. No mid-recipe surprises.</p></div>
+          </li>
+          <li>
+            <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+            <div><h4>Nutrition, honestly stated</h4><p>Calories and macros per serving, plus allergen callouts that persist through every adaptation Saffra makes.</p></div>
+          </li>
+          <li>
+            <div class="icon-box green"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M16 4l4 4M3 12a9 9 0 0 1 9-9"/></svg></div>
+            <div><h4>Adapt it to you</h4><p>One tap rewrites the recipe for your allergies, equipment, and skill — swaps named loud and clear, never silent.</p></div>
+          </li>
+        </ul>
+      </div>
+      <div class="fd-shots pair anim">
+        <div class="fd-shot">
+          <img src="screenshots/04-recipe-detail-light.png" loading="lazy"
+               alt="Recipe detail — hero photo with timing, difficulty, servings, and the Let's cook button">
+          <div class="fd-shot-caption">The top: vitals + "Let's cook"</div>
+        </div>
+        <div class="fd-shot">
+          <img src="screenshots/13-recipe-ingredients-dark.png" loading="lazy"
+               alt="Recipe detail scrolled — the ingredient list checked against your pantry">
+          <div class="fd-shot-caption">Below the fold: ingredients &amp; more</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1294,7 +1719,7 @@
         </a>
         <p>Your personal AI chef. Premium recipes you can trust — vetted by a trained chef-panel, adapted to your kitchen.</p>
       </div>
-      <div class="footer-col"><h4>Product</h4><ul><li><a href="#screenshots">Inside the App</a></li><li><a href="#intelligence">The AI</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#screenshots">Inside the App</a></li><li><a href="#time-aware">Time-Aware Home</a></li><li><a href="#intelligence">The AI</a></li><li><a href="#cooking-mode">Cooking Mode</a></li><li><a href="#pantry">Pantry</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
       <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hello@saffra.app">hello@saffra.app</a></li></ul></div>
     </div>
